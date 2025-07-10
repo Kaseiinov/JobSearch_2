@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/db/JobSearchDB.mv.db
+/db/JobSearchDB.trace.db
