@@ -25,7 +25,7 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public List<ResumeDto> findAllActive(){
+    public List<ResumeDto> findAll(){
         return null;
     }
 

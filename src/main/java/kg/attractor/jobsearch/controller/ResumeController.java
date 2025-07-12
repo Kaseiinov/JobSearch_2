@@ -33,16 +33,16 @@ public class ResumeController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("findAllActive")
-    public ResponseEntity<List<ResumeDto>> findAllActive() {
-        List<ResumeDto> resumes = resumeService.findAllActive();
-        return ResponseEntity.ok(resumes);
+    @GetMapping("findAll")
+    public ResponseEntity<List<ResumeDto>> findAll() {
+        List<ResumeDto> resumeDto = resumeService.findAll();
+        return ResponseEntity.ok(resumeDto);
     }
 
     @GetMapping("findByCategory/{id}")
     public ResponseEntity<List<ResumeDto>> findByCategoryId(@PathVariable Long id) {
-        List<ResumeDto> resumes = resumeService.findByCategoryId(id);
-        return ResponseEntity.ok(resumes);
+        List<ResumeDto> resumeDto = resumeService.findByCategoryId(id);
+        return ResponseEntity.ok(resumeDto);
     }
 
     @GetMapping("findRespondersToVacancyById/{id}")
@@ -51,9 +51,9 @@ public class ResumeController {
         return ResponseEntity.ok(responders);
     }
 
-    @GetMapping("findResumeById/{id}")
+    @GetMapping("findById/{id}")
     public ResponseEntity<ResumeDto> findResumeById(@PathVariable Long id) {
-        ResumeDto resume = resumeService.findResumeById(id);
-        return ResponseEntity.ok(resume);
+        ResumeDto resumeDto = resumeService.findResumeById(id);
+        return ResponseEntity.ok(resumeDto);
     }
 }
