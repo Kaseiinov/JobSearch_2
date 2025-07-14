@@ -34,3 +34,4 @@ build/
 /db/JobSearchDB.mv.db
 /db/JobSearchDB.trace.db
 /data/
+/db/
