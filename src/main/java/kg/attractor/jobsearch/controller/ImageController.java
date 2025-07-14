@@ -4,6 +4,7 @@ import kg.attractor.jobsearch.dto.ImageDto;
 import kg.attractor.jobsearch.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class ImageController {
     private final ImageService imageService;
 
-    @GetMapping("{id}")
-    public ImageDto findById(@PathVariable long id){
-        return imageService.getImageById(id);
+    @GetMapping()
+    public ResponseEntity<?> findByFileName(@RequestParam(name = "fileName") String fileName){
+        return imageService.findImageByFileName(fileName);
     }
 
     @PostMapping("save")
