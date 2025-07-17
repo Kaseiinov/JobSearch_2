@@ -13,13 +13,13 @@ public class Vacancy {
     private Long id;
     private String name;
     private String description;
-    private Category category_id;
+    private Category categoryId;
     private Double salary;
-    private Integer exp_from;
-    private Integer exp_to;
-    private Boolean is_active;
-    private User author_id;
-    private LocalDateTime created_date;
-    private LocalDateTime update_time;
+    private Integer expFrom;
+    private Integer expTo;
+    private Boolean isActive;
+    private User authorId;
+    private LocalDateTime createdDate;
+    private LocalDateTime updateTime;
 
 }

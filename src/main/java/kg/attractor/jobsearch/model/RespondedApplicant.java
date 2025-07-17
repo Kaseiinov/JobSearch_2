@@ -8,7 +8,7 @@ import lombok.Setter;
 
 public class RespondedApplicant {
     private Long id;
-    private Resume resume_id;
-    private Vacancy vacancy_id;
+    private Resume resumeId;
+    private Vacancy vacancyId;
     private Boolean confirmation;
 }

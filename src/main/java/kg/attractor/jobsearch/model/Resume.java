@@ -11,13 +11,13 @@ import java.util.List;
 @Setter
 public class Resume {
     private Long id;
-    private User applicant_id;
+    private User applicantId;
     private String name;
-    private Category category_id;
+    private Category categoryId;
     private Double salary;
-    private Boolean is_active;
-    private LocalDateTime created_date;
-    private LocalDateTime update_time;
+    private Boolean isActive;
+    private LocalDateTime createdDate;
+    private LocalDateTime updateTime;
     private WorkExperienceInfo experience;
     private EducationInfo education;
     private List<ContactInfo> contacts;
