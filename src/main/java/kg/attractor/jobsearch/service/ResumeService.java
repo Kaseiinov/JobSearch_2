@@ -13,7 +13,9 @@ public interface ResumeService {
 
     List<ResumeDto> findAll();
 
-    List<ResumeDto> findByCategoryId(Long id);
+    List<ResumeDto> findByCategory(String category);
+
+    List<ResumeDto> findByAuthor(String email);
 
     List<ResumeDto> findRespondersToVacancyById(Long id);
 

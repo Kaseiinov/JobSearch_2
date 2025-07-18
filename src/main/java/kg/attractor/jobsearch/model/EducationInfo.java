@@ -10,10 +10,10 @@ import java.time.LocalDate;
 
 public class EducationInfo {
     private Long id;
-    private Resume resume_id;
+    private Resume resumeId;
     private String institution;
     private String program;
-    private LocalDate start_date;
-    private LocalDate end_date;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String degree;
 }

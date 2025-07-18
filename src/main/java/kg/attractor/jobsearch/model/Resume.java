@@ -1,23 +1,24 @@
 package kg.attractor.jobsearch.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Resume {
     private Long id;
-    private User applicant_id;
+    private Long applicantId;
     private String name;
-    private Category category_id;
+    private Long categoryId;
     private Double salary;
-    private Boolean is_active;
-    private LocalDateTime created_date;
-    private LocalDateTime update_time;
+    private Boolean isActive;
+    private LocalDateTime createdDate;
+    private LocalDateTime updateTime;
     private WorkExperienceInfo experience;
     private EducationInfo education;
     private List<ContactInfo> contacts;
