@@ -280,3 +280,8 @@ VALUES
       WHERE u.email = 'alice.smith@example.com' AND r.name = 'Data Analyst' AND v.name = 'Data Scientist'),
      'Thank you for your application. We will review it shortly.',
      '2025-05-16');
+
+
+select r.* from resumes r
+join categories c on r.category_id = c.id
+where lower(c.name) = lower('web development');

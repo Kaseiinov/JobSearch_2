@@ -39,9 +39,15 @@ public class ResumeController {
         return ResponseEntity.ok(resumeDto);
     }
 
-    @GetMapping("findByCategory/{id}")
-    public ResponseEntity<List<ResumeDto>> findByCategoryId(@PathVariable Long id) {
-        List<ResumeDto> resumeDto = resumeService.findByCategoryId(id);
+    @GetMapping("findByCategory/{category}")
+    public ResponseEntity<List<ResumeDto>> findByCategoryId(@PathVariable String category) {
+        List<ResumeDto> resumeDto = resumeService.findByCategory(category);
+        return ResponseEntity.ok(resumeDto);
+    }
+
+    @GetMapping("findByAuthor/{email}")
+    public ResponseEntity<List<ResumeDto>> findByAuthor(@PathVariable String email) {
+        List<ResumeDto> resumeDto = resumeService.findByAuthor(email);
         return ResponseEntity.ok(resumeDto);
     }
 
