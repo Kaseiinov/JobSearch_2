@@ -27,7 +27,7 @@ public class UserDto {
     private String password;
     @NotBlank
     private String phoneNumber;
-    private UserImageDto avatar;
+    private String avatar;
 
     @NotBlank
     @Pattern(regexp = "(?i)employer|applicant|admin", message = "Role must be 'Employer', 'Applicant' or 'Admin'")

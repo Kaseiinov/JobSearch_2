@@ -7,5 +7,10 @@ import java.util.List;
 public interface UserService {
     List<UserDto> findAll();
 
-    UserDto findById(Long id);
+
+    UserDto findByName(String name);
+
+    UserDto findByEmail(String email);
+
+    UserDto findByPhoneNumber(String number);
 }

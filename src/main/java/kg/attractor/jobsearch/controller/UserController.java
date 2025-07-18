@@ -22,8 +22,18 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable Long id){
-        return ResponseEntity.ok(userService.findById(id));
+    @GetMapping("byName/{name}")
+    public ResponseEntity<UserDto> findByName(@PathVariable String name){
+        return ResponseEntity.ok(userService.findByName(name));
+    }
+
+    @GetMapping("byEmail/{email}")
+    public ResponseEntity<UserDto> findByEmail(@PathVariable String email){
+        return ResponseEntity.ok(userService.findByEmail(email));
+    }
+
+    @GetMapping("byPhoneNumber/{number}")
+    public ResponseEntity<UserDto> findByPhoneNumber(@PathVariable String number){
+        return ResponseEntity.ok(userService.findByPhoneNumber(number));
     }
 }

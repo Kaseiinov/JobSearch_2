@@ -25,22 +25,40 @@ public class UserDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
     }
 
-    public Optional<User> findById(long id){
-        String sql = "select * from users where id = ?;";
+    public Optional<User> findByName(String name){
+        String sql = "select * from users where name = ?;";
         return Optional.ofNullable(
                 DataAccessUtils.singleResult(
-                        jdbcTemplate.query(sql, new UserMapper(), id)
+                        jdbcTemplate.query(sql, new UserMapper(), name)
                 )
         );
     }
 
-    public List<User> findByEmail(String email){
-        String sql = "select * from users where email ilike :email;";
-        return namedParameterJdbcTemplate.query(
-                sql,
-                new MapSqlParameterSource()
-                        .addValue("email", "%" + email + "%"),
-                new UserMapper()
+    public Optional<User> findByEmail(String email){
+        String sql = "select * from users where email = ?;";
+        return Optional.ofNullable(
+                DataAccessUtils.singleResult(
+                        jdbcTemplate.query(sql, new UserMapper(), email)
+                )
+        );
+    }
+
+//    public List<User> findByEmail(String email){
+//        String sql = "select * from users where email ilike :email;";
+//        return namedParameterJdbcTemplate.query(
+//                sql,
+//                new MapSqlParameterSource()
+//                        .addValue("email", "%" + email + "%"),
+//                new UserMapper()
+//        );
+//    }
+
+    public Optional<User> findByPhoneNumber(String number){
+        String sql = "select * from users where phone_number = ?;";
+        return Optional.ofNullable(
+                DataAccessUtils.singleResult(
+                        jdbcTemplate.query(sql, new UserMapper(), number)
+                )
         );
     }
 

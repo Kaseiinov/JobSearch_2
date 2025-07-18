@@ -30,12 +30,52 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findById(Long id){
-        User user = userDao.findById(id).orElseThrow(UserNotFoundException::new);
+    public UserDto findByName(String name){
+        User user = userDao.findByName(name).orElseThrow(UserNotFoundException::new);
         return UserDto
                 .builder()
                 .id(user.getId())
                 .name(user.getName())
+                .surname(user.getSurname())
+                .age(user.getAge())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .avatar(user.getAvatar())
+                .accountType(user.getAccountType())
+                .password(user.getPassword())
+                .build();
+    }
+
+    @Override
+    public UserDto findByEmail(String email){
+        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        return UserDto
+                .builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .age(user.getAge())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .avatar(user.getAvatar())
+                .accountType(user.getAccountType())
+                .password(user.getPassword())
+                .build();
+    }
+
+    @Override
+    public UserDto findByPhoneNumber(String number){
+        User user = userDao.findByPhoneNumber(number).orElseThrow(UserNotFoundException::new);
+        return UserDto
+                .builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .age(user.getAge())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .avatar(user.getAvatar())
+                .accountType(user.getAccountType())
                 .password(user.getPassword())
                 .build();
     }
