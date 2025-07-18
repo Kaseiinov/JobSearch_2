@@ -18,56 +18,49 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findAll(){
         List<User> users = userDao.findAll();
-        return users
-                .stream()
-                .map(u -> UserDto
-                        .builder()
-                        .id(u.getId())
-                        .name(u.getName())
-                        .password(u.getPassword())
-                        .build()
-                ).toList();
+        return userBuilder(users);
     }
 
     @Override
     public UserDto findByName(String name){
         User user = userDao.findByName(name).orElseThrow(UserNotFoundException::new);
-        return UserDto
-                .builder()
-                .id(user.getId())
-                .name(user.getName())
-                .surname(user.getSurname())
-                .age(user.getAge())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .avatar(user.getAvatar())
-                .accountType(user.getAccountType())
-                .password(user.getPassword())
-                .build();
+        return userBuilder(user);
     }
 
     @Override
     public UserDto findByEmail(String email){
         User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
-        return UserDto
-                .builder()
-                .id(user.getId())
-                .name(user.getName())
-                .surname(user.getSurname())
-                .age(user.getAge())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .avatar(user.getAvatar())
-                .accountType(user.getAccountType())
-                .password(user.getPassword())
-                .build();
+        return userBuilder(user);
     }
 
     @Override
     public UserDto findByPhoneNumber(String number){
         User user = userDao.findByPhoneNumber(number).orElseThrow(UserNotFoundException::new);
-        return UserDto
-                .builder()
+        return userBuilder(user);
+    }
+
+    @Override
+    public List<UserDto> userBuilder(List<User> users){
+        List<UserDto> userDtos = users
+                .stream()
+                .map(r -> UserDto.builder()
+                        .id(r.getId())
+                        .name(r.getName())
+                        .surname(r.getSurname())
+                        .age(r.getAge())
+                        .email(r.getEmail())
+                        .phoneNumber(r.getPhoneNumber())
+                        .avatar(r.getAvatar())
+                        .accountType(r.getAccountType())
+                        .password(r.getPassword())
+                        .build()).toList();
+        return userDtos;
+
+    }
+
+    @Override
+    public UserDto userBuilder(User user){
+        return UserDto.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .surname(user.getSurname())
@@ -78,5 +71,6 @@ public class UserServiceImpl implements UserService {
                 .accountType(user.getAccountType())
                 .password(user.getPassword())
                 .build();
+
     }
 }

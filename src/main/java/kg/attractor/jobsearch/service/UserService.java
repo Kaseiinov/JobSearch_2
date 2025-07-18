@@ -1,6 +1,7 @@
 package kg.attractor.jobsearch.service;
 
 import kg.attractor.jobsearch.dto.UserDto;
+import kg.attractor.jobsearch.model.User;
 
 import java.util.List;
 
@@ -13,4 +14,8 @@ public interface UserService {
     UserDto findByEmail(String email);
 
     UserDto findByPhoneNumber(String number);
+
+    List<UserDto> userBuilder(List<User> users);
+
+    UserDto userBuilder(User user);
 }

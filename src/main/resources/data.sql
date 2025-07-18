@@ -282,6 +282,3 @@ VALUES
      '2025-05-16');
 
 
-select r.* from resumes r
-join categories c on r.category_id = c.id
-where lower(c.name) = lower('web development');
