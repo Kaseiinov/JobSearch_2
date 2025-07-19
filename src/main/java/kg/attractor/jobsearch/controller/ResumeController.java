@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("resume")
+@RequestMapping("resumes")
 @RequiredArgsConstructor
 public class ResumeController {
     private final ResumeService resumeService;

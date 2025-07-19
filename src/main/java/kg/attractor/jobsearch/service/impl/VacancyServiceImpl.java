@@ -46,7 +46,7 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<VacancyDto> findAllActive(){
+    public List<VacancyDto> findAllActive(boolean state){
         return null;
     }
 

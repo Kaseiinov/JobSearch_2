@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("vacancy")
+@RequestMapping("vacancies")
 @RequiredArgsConstructor
 public class VacancyController {
     private final VacancyService vacancyService;
 
-    @GetMapping("findByUserResponse/{email}")
-    public ResponseEntity<List<VacancyDto>> findByUserResponse(@PathVariable String email) {
+    @GetMapping
+    public ResponseEntity<List<VacancyDto>> findByUserResponse(@RequestParam(required = false) String email) {
         List<VacancyDto> vacancyDto = vacancyService.findVacanciesByUserResponse(email);
         return ResponseEntity.ok(vacancyDto);
     }
@@ -31,43 +31,43 @@ public class VacancyController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("editById/{id}")
+    @PutMapping("edit/{id}")
     public ResponseEntity<Void> editById(@RequestBody VacancyDto vacancyDto, @PathVariable Long id) {
         vacancyService.editById(vacancyDto, id);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("deleteById/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         vacancyService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("findAllActive")
-    public ResponseEntity<List<VacancyDto>> findAllActive() {
-        List<VacancyDto> vacancyDto = vacancyService.findAllActive();
+    @GetMapping
+    public ResponseEntity<List<VacancyDto>> findAllActive(@RequestParam(required = false) boolean active) {
+        List<VacancyDto> vacancyDto = vacancyService.findAllActive(active);
         return ResponseEntity.ok(vacancyDto);
     }
 
-    @GetMapping("findAll")
+    @GetMapping
     public ResponseEntity<List<VacancyDto>> findAll() {
         List<VacancyDto> vacancyDto = vacancyService.findAll();
         return ResponseEntity.ok(vacancyDto);
     }
 
-    @GetMapping("findByCategory/{category}")
-    public ResponseEntity<List<VacancyDto>> findByCategoryId(@PathVariable String category) {
+    @GetMapping
+    public ResponseEntity<List<VacancyDto>> findByCategoryId(@RequestParam(required = false) String category) {
         List<VacancyDto> vacancyDto = vacancyService.findByCategory(category);
         return ResponseEntity.ok(vacancyDto);
     }
 
-    @GetMapping("findRespondersToVacancyById/{id}")
-    public ResponseEntity<List<UserDto>> findRespondersToVacancy(@PathVariable Long id) {
-        List<UserDto> userDtos = vacancyService.findRespondersToVacancyById(id);
+    @GetMapping("responders")
+    public ResponseEntity<List<UserDto>> findRespondersToVacancy(@RequestParam Long vacancyId) {
+        List<UserDto> userDtos = vacancyService.findRespondersToVacancyById(vacancyId);
         return ResponseEntity.ok(userDtos);
     }
 
-    @GetMapping("findById/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<VacancyDto> findVacancyById(@PathVariable Long id) {
         VacancyDto vacancyDto = vacancyService.findVacancyById(id);
         return ResponseEntity.ok(vacancyDto);

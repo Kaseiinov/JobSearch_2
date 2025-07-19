@@ -16,7 +16,7 @@ public interface VacancyService {
 
     List<VacancyDto> findAll();
 
-    List<VacancyDto> findAllActive();
+    List<VacancyDto> findAllActive(boolean state);
 
     List<VacancyDto> findByCategory(String category);
 
