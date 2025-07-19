@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("images")
+@RequestMapping("/api/images")
 @RequiredArgsConstructor
 public class ImageController {
     private final ImageService imageService;
@@ -18,7 +18,7 @@ public class ImageController {
         return imageService.findImageByFileName(fileName);
     }
 
-    @PostMapping("save")
+    @PostMapping("/save")
     public HttpStatus save(ImageDto imageDto){
         imageService.create(imageDto);
         return HttpStatus.CREATED;

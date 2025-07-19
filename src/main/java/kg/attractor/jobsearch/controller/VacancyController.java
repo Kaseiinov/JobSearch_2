@@ -1,10 +1,7 @@
 package kg.attractor.jobsearch.controller;
 
-import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
-import kg.attractor.jobsearch.model.User;
-import kg.attractor.jobsearch.service.UserService;
 import kg.attractor.jobsearch.service.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,63 +11,56 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("vacancies")
+@RequestMapping("/api/vacancies")
 @RequiredArgsConstructor
 public class VacancyController {
     private final VacancyService vacancyService;
 
     @GetMapping
-    public ResponseEntity<List<VacancyDto>> findByUserResponse(@RequestParam(required = false) String email) {
-        List<VacancyDto> vacancyDto = vacancyService.findVacanciesByUserResponse(email);
-        return ResponseEntity.ok(vacancyDto);
+    public ResponseEntity<List<VacancyDto>> getAllVacancies(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(required = false) String userEmail) {
+
+        if (userEmail != null) {
+            return ResponseEntity.ok(vacancyService.findVacanciesByUserResponse(userEmail));
+        }
+        if (category != null) {
+            return ResponseEntity.ok(vacancyService.findByCategory(category));
+        }
+        if (active != null) {
+            return ResponseEntity.ok(vacancyService.findAllActive(active));
+        }
+        return ResponseEntity.ok(vacancyService.findAll());
     }
 
-    @PostMapping("create")
-    public ResponseEntity<Void> create(@RequestBody VacancyDto vacancyDto) {
+    @GetMapping("/{id}")
+    public ResponseEntity<VacancyDto> getVacancyById(@PathVariable Long id) {
+        return ResponseEntity.ok(vacancyService.findVacancyById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createVacancy(@RequestBody VacancyDto vacancyDto) {
         vacancyService.create(vacancyDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("edit/{id}")
-    public ResponseEntity<Void> editById(@RequestBody VacancyDto vacancyDto, @PathVariable Long id) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateVacancy(
+            @PathVariable Long id,
+            @RequestBody VacancyDto vacancyDto) {
         vacancyService.editById(vacancyDto, id);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVacancy(@PathVariable Long id) {
         vacancyService.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<VacancyDto>> findAllActive(@RequestParam(required = false) boolean active) {
-        List<VacancyDto> vacancyDto = vacancyService.findAllActive(active);
-        return ResponseEntity.ok(vacancyDto);
+    @GetMapping("/{id}/responders")
+    public ResponseEntity<List<UserDto>> getVacancyResponders(@PathVariable Long id) {
+        return ResponseEntity.ok(vacancyService.findRespondersToVacancyById(id));
     }
-
-    @GetMapping
-    public ResponseEntity<List<VacancyDto>> findAll() {
-        List<VacancyDto> vacancyDto = vacancyService.findAll();
-        return ResponseEntity.ok(vacancyDto);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<VacancyDto>> findByCategoryId(@RequestParam(required = false) String category) {
-        List<VacancyDto> vacancyDto = vacancyService.findByCategory(category);
-        return ResponseEntity.ok(vacancyDto);
-    }
-
-    @GetMapping("responders")
-    public ResponseEntity<List<UserDto>> findRespondersToVacancy(@RequestParam Long vacancyId) {
-        List<UserDto> userDtos = vacancyService.findRespondersToVacancyById(vacancyId);
-        return ResponseEntity.ok(userDtos);
-    }
-
-    @GetMapping("{id}")
-    public ResponseEntity<VacancyDto> findVacancyById(@PathVariable Long id) {
-        VacancyDto vacancyDto = vacancyService.findVacancyById(id);
-        return ResponseEntity.ok(vacancyDto);
-    }
-
 }

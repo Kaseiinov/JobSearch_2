@@ -4,36 +4,37 @@ import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll(){
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    @GetMapping("byName/{name}")
-    public ResponseEntity<UserDto> findByName(@PathVariable String name){
-        return ResponseEntity.ok(userService.findByName(name));
-    }
+    @GetMapping("/search")
+    public ResponseEntity<UserDto> searchUser(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phone) {
 
-    @GetMapping("byEmail/{email}")
-    public ResponseEntity<UserDto> findByEmail(@PathVariable String email){
-        return ResponseEntity.ok(userService.findByEmail(email));
-    }
+        if (name != null) {
+            return ResponseEntity.ok(userService.findByName(name));
+        }
+        if (email != null) {
+            return ResponseEntity.ok(userService.findByEmail(email));
+        }
+        if (phone != null) {
+            return ResponseEntity.ok(userService.findByPhoneNumber(phone));
+        }
 
-    @GetMapping("byPhoneNumber/{number}")
-    public ResponseEntity<UserDto> findByPhoneNumber(@PathVariable String number){
-        return ResponseEntity.ok(userService.findByPhoneNumber(number));
+        return ResponseEntity.badRequest().build();
     }
 }
