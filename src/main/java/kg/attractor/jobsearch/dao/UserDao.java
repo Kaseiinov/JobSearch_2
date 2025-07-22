@@ -20,6 +20,26 @@ public class UserDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public void update(User user, Long id){
+        String sql = "update users set " +
+                "name = :name, " +
+                "surname = :surname, " +
+                "age = :age, " +
+                "phone_number = :phoneNumber, " +
+                "account_type = :account_type " +
+                "where id = :id;";
+
+        namedParameterJdbcTemplate.update(sql,
+                new MapSqlParameterSource()
+                        .addValue("name", user.getName())
+                        .addValue("surname", user.getSurname())
+                        .addValue("age", user.getAge())
+                        .addValue("phoneNumber", user.getPhoneNumber())
+                        .addValue("account_type", user.getAccountType())
+                        .addValue("id", id)
+        );
+    }
+
     public List<User> findAll(){
         String sql = "select * from users";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));

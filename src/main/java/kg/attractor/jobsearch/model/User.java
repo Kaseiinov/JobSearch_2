@@ -1,13 +1,15 @@
 package kg.attractor.jobsearch.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Collection;
 import java.util.List;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     private Long id;
     private String name;

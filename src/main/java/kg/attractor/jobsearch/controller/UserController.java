@@ -14,6 +14,11 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    @PutMapping("/{id}")
+    public void editById(@PathVariable Long id, @RequestBody UserDto userDto){
+        userService.editUserById(userDto, id);
+    }
+
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
