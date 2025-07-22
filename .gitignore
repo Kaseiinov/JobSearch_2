@@ -35,3 +35,4 @@ build/
 /db/JobSearchDB.trace.db
 /data/
 /db/
+/logs/

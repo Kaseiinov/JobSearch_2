@@ -14,3 +14,11 @@ spring:
     change-log: classpath:/db/changelog/master.yaml
 
 #====================== DataBase ========================
+
+logging:
+  level:
+    root: info
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n'
+  file:
+    path: logs
