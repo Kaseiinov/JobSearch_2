@@ -16,6 +16,19 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
 
     @Override
+    public void editUserById(UserDto userDto, Long id){
+        User user = User.builder()
+                .name(userDto.getName())
+                .surname(userDto.getSurname())
+                .age(userDto.getAge())
+                .phoneNumber(userDto.getPhoneNumber())
+                .avatar(userDto.getAvatar())
+                .accountType(userDto.getAccountType())
+                .build();
+        userDao.update(user, id);
+    }
+
+    @Override
     public List<UserDto> findAll(){
         List<User> users = userDao.findAll();
         return userBuilder(users);
