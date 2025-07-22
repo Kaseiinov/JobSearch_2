@@ -1,14 +1,15 @@
 package kg.attractor.jobsearch.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Getter
 @Setter
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Vacancy {
     private Long id;
     private String name;
