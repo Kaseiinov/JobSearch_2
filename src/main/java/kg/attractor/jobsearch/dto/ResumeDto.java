@@ -35,15 +35,15 @@ public class ResumeDto {
     private List<ContactsInfoDto> contacts;
 
 
-    public String getCreatedDateFormatted() {
-        return createdDate != null
-                ? createdDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))
-                : "";
-    }
-
-    public String getUpdateTimeFormatted() {
-        return updateTime != null
-                ? updateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))
-                : "";
-    }
+//    public String getCreatedDateFormatted() {
+//        return createdDate != null
+//                ? createdDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))
+//                : "";
+//    }
+//
+//    public String getUpdateTimeFormatted() {
+//        return updateTime != null
+//                ? updateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))
+//                : "";
+//    }
 }

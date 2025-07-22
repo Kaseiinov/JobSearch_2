@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.controller;
 
+import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.service.ResumeService;
 import lombok.RequiredArgsConstructor;
@@ -10,56 +11,52 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("resume")
+@RequestMapping("/api/resumes")
 @RequiredArgsConstructor
 public class ResumeController {
     private final ResumeService resumeService;
 
-    @PostMapping("create")
-    public ResponseEntity<Void> create(@RequestBody ResumeDto resumeDto) {
+    @PostMapping
+    public ResponseEntity<Void> createResume(@RequestBody @Valid ResumeDto resumeDto) {
         resumeService.create(resumeDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("editById/{id}")
-    public ResponseEntity<Void> editById(@RequestBody ResumeDto resumeDto, @PathVariable Long id) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateResume(
+            @PathVariable Long id,
+            @RequestBody @Valid ResumeDto resumeDto) {
         resumeService.editById(resumeDto, id);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("deleteById/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteResume(@PathVariable Long id) {
         resumeService.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("findAll")
-    public ResponseEntity<List<ResumeDto>> findAll() {
-        List<ResumeDto> resumeDto = resumeService.findAll();
-        return ResponseEntity.ok(resumeDto);
+    @GetMapping
+    public ResponseEntity<List<ResumeDto>> getAllResumes(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String authorEmail) {
+
+        if (category != null) {
+            return ResponseEntity.ok(resumeService.findByCategory(category));
+        }
+        if (authorEmail != null) {
+            return ResponseEntity.ok(resumeService.findByAuthor(authorEmail));
+        }
+        return ResponseEntity.ok(resumeService.findAll());
     }
 
-    @GetMapping("findByCategory/{category}")
-    public ResponseEntity<List<ResumeDto>> findByCategoryId(@PathVariable String category) {
-        List<ResumeDto> resumeDto = resumeService.findByCategory(category);
-        return ResponseEntity.ok(resumeDto);
+    @GetMapping("/{id}")
+    public ResponseEntity<ResumeDto> getResumeById(@PathVariable Long id) {
+        return ResponseEntity.ok(resumeService.findResumeById(id));
     }
 
-    @GetMapping("findByAuthor/{email}")
-    public ResponseEntity<List<ResumeDto>> findByAuthor(@PathVariable String email) {
-        List<ResumeDto> resumeDto = resumeService.findByAuthor(email);
-        return ResponseEntity.ok(resumeDto);
-    }
-
-    @GetMapping("findRespondersToVacancyById/{id}")
-    public ResponseEntity<List<ResumeDto>> findRespondersToVacancy(@PathVariable Long id) {
-        List<ResumeDto> responders = resumeService.findRespondersToVacancyById(id);
-        return ResponseEntity.ok(responders);
-    }
-
-    @GetMapping("findById/{id}")
-    public ResponseEntity<ResumeDto> findResumeById(@PathVariable Long id) {
-        ResumeDto resumeDto = resumeService.findResumeById(id);
-        return ResponseEntity.ok(resumeDto);
+    @GetMapping("/{id}/responders")
+    public ResponseEntity<List<ResumeDto>> getVacancyResponders(@PathVariable Long id) {
+        return ResponseEntity.ok(resumeService.findRespondersToVacancyById(id));
     }
 }

@@ -1,103 +1,3 @@
--- Сначала создаём таблицы без внешних ключей
-CREATE TABLE IF NOT EXISTS users (
-     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-     name VARCHAR(50),
-    surname VARCHAR(50),
-    age INTEGER,
-    email VARCHAR(250),
-    password VARCHAR(255),
-    phone_number VARCHAR(50),
-    avatar VARCHAR(255),
-    account_type VARCHAR(50)
-    );
-
-CREATE TABLE IF NOT EXISTS contact_types (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    type VARCHAR(100)
-    );
-
-CREATE TABLE IF NOT EXISTS categories (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    parent_id BIGINT
-    );
-
-CREATE TABLE IF NOT EXISTS resumes (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    applicant_id BIGINT,
-    name VARCHAR(100),
-    category_id BIGINT,
-    salary DOUBLE,
-    is_active BOOLEAN,
-    created_date TIMESTAMP,
-    update_time TIMESTAMP,
-    FOREIGN KEY (applicant_id) REFERENCES users(id),
-    FOREIGN KEY (category_id) REFERENCES categories(id)
-    );
-
-CREATE TABLE IF NOT EXISTS vacancies (
-     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-     name VARCHAR(55),
-    description VARCHAR(1000),
-    category_id BIGINT,
-    salary DOUBLE,
-    exp_from INTEGER,
-    exp_to INTEGER,
-    is_active BOOLEAN,
-    author_id BIGINT,
-    created_date TIMESTAMP,
-    update_time TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES categories(id),
-    FOREIGN KEY (author_id) REFERENCES users(id)
-    );
-
-CREATE TABLE IF NOT EXISTS responded_applicants (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    resume_id BIGINT,
-    vacancy_id BIGINT,
-    confirmation BOOLEAN,
-    FOREIGN KEY (resume_id) REFERENCES resumes(id),
-    FOREIGN KEY (vacancy_id) REFERENCES vacancies(id)
-    );
-
-CREATE TABLE IF NOT EXISTS contacts_info (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    type_id BIGINT,
-    resume_id BIGINT,
-    info_value TEXT,
-    FOREIGN KEY (type_id) REFERENCES contact_types(id),
-    FOREIGN KEY (resume_id) REFERENCES resumes(id)
-    );
-
-CREATE TABLE IF NOT EXISTS education_info (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    resume_id BIGINT,
-    institution VARCHAR(255),
-    program VARCHAR(255),
-    start_date DATE,
-    end_date DATE,
-    degree VARCHAR(255),
-    FOREIGN KEY (resume_id) REFERENCES resumes(id)
-    );
-
-CREATE TABLE IF NOT EXISTS work_experience_info (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    resume_id BIGINT,
-    years INTEGER,
-    company_name VARCHAR(255),
-    position VARCHAR(255),
-    responsibilities VARCHAR(1000),
-    FOREIGN KEY (resume_id) REFERENCES resumes(id)
-    );
-
-CREATE TABLE IF NOT EXISTS messages (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    responded_applicants_id BIGINT,
-    content VARCHAR(1000),
-    timestamp TIMESTAMP,
-    FOREIGN KEY (responded_applicants_id) REFERENCES responded_applicants(id)
-    );
-
 insert into users(name, surname, age, email, password, phone_number, avatar, account_type)
 values ('John', 'Doe', 28, 'john.doe@example.com', 'qwe', '+1234567890', null, 'applicant'),
        ('Alice', 'Smith', 32, 'alice.smith@example.com', 'qwe', '+1987654321', null, 'applicant'),
@@ -263,7 +163,7 @@ VALUES
      'Data Analyst',
      'Business metrics analysis and reporting');
 
-INSERT INTO messages (responded_applicants_id, content, timestamp)
+INSERT INTO messages (responded_applicants_id, content, CREATED_DATE)
 VALUES
     ((SELECT ra.id FROM responded_applicants ra
                             JOIN resumes r ON ra.resume_id = r.id
@@ -280,5 +180,3 @@ VALUES
       WHERE u.email = 'alice.smith@example.com' AND r.name = 'Data Analyst' AND v.name = 'Data Scientist'),
      'Thank you for your application. We will review it shortly.',
      '2025-05-16');
-
-

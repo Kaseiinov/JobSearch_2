@@ -3,6 +3,7 @@ package kg.attractor.jobsearch.service.impl;
 import kg.attractor.jobsearch.dao.VacancyDao;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
+import kg.attractor.jobsearch.exceptions.VacancyNotFoundException;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.model.Vacancy;
 import kg.attractor.jobsearch.service.UserService;
@@ -10,6 +11,7 @@ import kg.attractor.jobsearch.service.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,17 +22,42 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public void create(VacancyDto vacancyDto){
-
+        Vacancy vacancy = Vacancy.builder()
+                .id(vacancyDto.getId())
+                .name(vacancyDto.getName())
+                .description(vacancyDto.getDescription())
+                .categoryId(vacancyDto.getCategoryId())
+                .salary(vacancyDto.getSalary())
+                .expFrom(vacancyDto.getExpFrom())
+                .expTo(vacancyDto.getExpTo())
+                .isActive(vacancyDto.getIsActive())
+                .authorId(vacancyDto.getAuthorId())
+                .createdDate(LocalDateTime.now())
+                .build();
+        vacancyDao.create(vacancy);
     }
 
     @Override
     public void editById(VacancyDto vacancyDto, Long id){
+        Vacancy vacancy = Vacancy.builder()
+                .id(vacancyDto.getId())
+                .name(vacancyDto.getName())
+                .description(vacancyDto.getDescription())
+                .categoryId(vacancyDto.getCategoryId())
+                .salary(vacancyDto.getSalary())
+                .expFrom(vacancyDto.getExpFrom())
+                .expTo(vacancyDto.getExpTo())
+                .isActive(vacancyDto.getIsActive())
+                .authorId(vacancyDto.getAuthorId())
+                .updateTime(LocalDateTime.now())
+                .build();
 
+        vacancyDao.update(id, vacancy);
     }
 
     @Override
     public void deleteById(Long id){
-
+        vacancyDao.delete(id);
     }
 
     @Override
@@ -46,7 +73,7 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<VacancyDto> findAllActive(){
+    public List<VacancyDto> findAllActive(boolean state){
         return null;
     }
 
@@ -64,7 +91,8 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public VacancyDto findVacancyById(Long id){
-        return null;
+        Vacancy vacancy = vacancyDao.findById(id).orElseThrow(VacancyNotFoundException::new);
+        return vacancyBuilder(vacancy);
     }
 
     public List<VacancyDto> vacancyBuilder(List<Vacancy> vacancies){

@@ -6,15 +6,79 @@ import kg.attractor.jobsearch.mappers.VacancyMapper;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.model.Vacancy;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public void delete(Long id){
+        String sql = "delete from vacancies where id = ?;";
+        jdbcTemplate.update(sql, id);
+    }
+
+    public void create(Vacancy vacancy) {
+        String sql = "INSERT INTO vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date) " +
+                "VALUES (:name, :description, (select id from CATEGORIES where id = :categoryId), :salary, :expFrom, :expTo, :is_active, (select id from users where id  = :authorId), :createdDate)";
+
+        namedParameterJdbcTemplate.update(sql,
+                new MapSqlParameterSource()
+                        .addValue("name", vacancy.getName())
+                        .addValue("description", vacancy.getDescription())
+                        .addValue("categoryId", vacancy.getCategoryId())
+                        .addValue("salary", vacancy.getSalary())
+                        .addValue("expFrom", vacancy.getExpFrom())
+                        .addValue("expTo", vacancy.getExpTo())
+                        .addValue("is_active", vacancy.getIsActive())
+                        .addValue("authorId", vacancy.getAuthorId())
+                        .addValue("createdDate", vacancy.getCreatedDate())
+        );
+    }
+
+    public void update(Long id, Vacancy vacancy){
+        String sql = "UPDATE vacancies SET " +
+                "name = :name, " +
+                "description = :description, " +
+                "category_id = :categoryId, " +
+                "salary = :salary, " +
+                "exp_from = :expFrom, " +
+                "exp_to = :expTo, " +
+                "is_active = :isActive, " +
+                "update_time = :updateTime " +
+                "WHERE id = :id";
+
+        namedParameterJdbcTemplate.update(sql,
+                new MapSqlParameterSource()
+                        .addValue("name", vacancy.getName())
+                        .addValue("description", vacancy.getDescription())
+                        .addValue("categoryId", vacancy.getCategoryId())
+                        .addValue("salary", vacancy.getSalary())
+                        .addValue("expFrom", vacancy.getExpFrom())
+                        .addValue("expTo", vacancy.getExpTo())
+                        .addValue("isActive", vacancy.getIsActive())
+                        .addValue("authorId", vacancy.getAuthorId())
+                        .addValue("updateTime", vacancy.getUpdateTime())
+                        .addValue("id", id)
+        );
+    }
+    public Optional<Vacancy> findById(Long id){
+        String sql = "select * from vacancies where id = ?";
+        return Optional.ofNullable(
+                DataAccessUtils.singleResult(
+                        jdbcTemplate.query(sql, new VacancyMapper(), id)
+                )
+        );
+    }
 
     public List<Vacancy> findVacanciesByUserResponse(String email) {
         String sql = "SELECT v.* FROM vacancies v " +

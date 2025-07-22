@@ -2,11 +2,14 @@ package kg.attractor.jobsearch.service.impl;
 
 import kg.attractor.jobsearch.dao.ResumeDao;
 import kg.attractor.jobsearch.dto.ResumeDto;
+import kg.attractor.jobsearch.exceptions.ResumeNotFoundException;
 import kg.attractor.jobsearch.model.Resume;
 import kg.attractor.jobsearch.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,17 +19,35 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public void create(ResumeDto resumeDto){
-
+        Resume resume = Resume.builder()
+                .applicantId(resumeDto.getApplicantId())
+                .name(resumeDto.getName())
+                .categoryId(resumeDto.getCategoryId())
+                .salary(resumeDto.getSalary())
+                .isActive(resumeDto.getIsActive())
+                .createdDate(LocalDateTime.now())
+                .build();
+        resumeDao.create(resume);
     }
 
     @Override
     public void editById(ResumeDto resumeDto, Long id){
+        Resume resume = Resume.builder()
+                .id(resumeDto.getId())
+                .name(resumeDto.getName())
+                .categoryId(resumeDto.getCategoryId())
+                .salary(resumeDto.getSalary())
+                .isActive(resumeDto.getIsActive())
+                .updateTime(LocalDateTime.now())
+                .build();
+
+        resumeDao.updateResumeById(id, resume);
 
     }
 
     @Override
     public void deleteById(Long id){
-
+        resumeDao.deleteById(id);
     }
 
     @Override
@@ -53,7 +74,8 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public ResumeDto findResumeById(Long id){
-        return null;
+        Resume resume = resumeDao.findById(id).orElseThrow(ResumeNotFoundException::new);
+        return resumeBuilder(resume);
     }
 
     public List<ResumeDto> resumeBuilder(List<Resume> resumes){
