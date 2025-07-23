@@ -20,14 +20,19 @@ public class VacancyDto {
     @NotBlank
     private String description;
     @NotNull
+    @Positive
     private Long categoryId;
     @NotNull
     @PositiveOrZero
     private Double salary;
+    @Positive
     private Integer expFrom;
+    @Positive
     private Integer expTo;
     @NotNull
     private Boolean isActive;
+    @NotNull
+    @Positive
     private Long authorId;
     @Past
     private LocalDateTime createdDate;

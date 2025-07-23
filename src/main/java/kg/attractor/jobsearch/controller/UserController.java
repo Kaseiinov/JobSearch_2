@@ -1,6 +1,8 @@
 package kg.attractor.jobsearch.controller;
 
+import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.UserDto;
+import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,8 @@ public class UserController {
     private final UserService userService;
 
     @PutMapping("/{id}")
-    public void editById(@PathVariable Long id, @RequestBody UserDto userDto){
-        userService.editUserById(userDto, id);
+    public void editById(@PathVariable Long id, @RequestBody @Valid UserEditDto userEditDto){
+        userService.editUserById(userEditDto, id);
     }
 
     @GetMapping

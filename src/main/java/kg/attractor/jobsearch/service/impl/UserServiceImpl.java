@@ -2,6 +2,7 @@ package kg.attractor.jobsearch.service.impl;
 
 import kg.attractor.jobsearch.dao.UserDao;
 import kg.attractor.jobsearch.dto.UserDto;
+import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.exceptions.UserNotFoundException;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.service.UserService;
@@ -16,13 +17,12 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
 
     @Override
-    public void editUserById(UserDto userDto, Long id){
+    public void editUserById(UserEditDto userDto, Long id){
         User user = User.builder()
                 .name(userDto.getName())
                 .surname(userDto.getSurname())
                 .age(userDto.getAge())
                 .phoneNumber(userDto.getPhoneNumber())
-                .avatar(userDto.getAvatar())
                 .accountType(userDto.getAccountType())
                 .build();
         userDao.update(user, id);
