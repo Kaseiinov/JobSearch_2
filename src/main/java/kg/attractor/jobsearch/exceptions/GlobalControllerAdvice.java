@@ -23,5 +23,10 @@ public class GlobalControllerAdvice {
     public ResponseEntity<ErrorResponseBody> validationHandler (MethodArgumentNotValidException ex){
         return new ResponseEntity<>(errorService.makeResponse(ex.getBindingResult()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public ErrorResponse numberFormatHandler (NumberFormatException ex){
+        return ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, ex.getMessage()).build();
+    }
 }
 
