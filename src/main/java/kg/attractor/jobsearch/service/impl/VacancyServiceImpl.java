@@ -22,6 +22,10 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public void create(VacancyDto vacancyDto){
+        if(vacancyDto.getExpFrom() >= vacancyDto.getExpTo()){
+            throw new NumberFormatException();
+        }
+
         Vacancy vacancy = Vacancy.builder()
                 .id(vacancyDto.getId())
                 .name(vacancyDto.getName())
@@ -34,11 +38,16 @@ public class VacancyServiceImpl implements VacancyService {
                 .authorId(vacancyDto.getAuthorId())
                 .createdDate(LocalDateTime.now())
                 .build();
+
         vacancyDao.create(vacancy);
     }
 
     @Override
     public void editById(VacancyDto vacancyDto, Long id){
+        if(vacancyDto.getExpFrom() >= vacancyDto.getExpTo()){
+            throw new NumberFormatException();
+        }
+
         Vacancy vacancy = Vacancy.builder()
                 .id(vacancyDto.getId())
                 .name(vacancyDto.getName())
