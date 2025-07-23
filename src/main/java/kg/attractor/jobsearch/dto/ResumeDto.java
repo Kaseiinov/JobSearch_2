@@ -16,10 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 public class ResumeDto {
     private Long id;
+    @NotNull
+    @Positive
     private Long applicantId;
     @NotBlank
     private String name;
     @NotNull
+    @Positive
     private Long categoryId;
     @NotNull
     @PositiveOrZero
