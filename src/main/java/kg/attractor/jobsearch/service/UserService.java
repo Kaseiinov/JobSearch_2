@@ -1,12 +1,13 @@
 package kg.attractor.jobsearch.service;
 
 import kg.attractor.jobsearch.dto.UserDto;
+import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.model.User;
 
 import java.util.List;
 
 public interface UserService {
-    void editUserById(UserDto userDto, Long id);
+    void editUserById(UserEditDto userDto, Long id);
 
     List<UserDto> findAll();
 
