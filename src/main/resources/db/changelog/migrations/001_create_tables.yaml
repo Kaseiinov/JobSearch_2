@@ -59,13 +59,17 @@ databaseChangeLog:
               - column:
                   name: name
                   type: varchar(55)
-                  defaultOnNull: false
               - column:
                   name: parent_id
                   type: long
-                  constraints:
-                    foreignKeyName: fk_categories_parent_id
-                    references: categories(id)
+        - addForeignKeyConstraint:
+            baseTableName: categories
+            baseColumnNames: parent_id
+            constraintName: fk_categories_parent_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            onDelete: RESTRICT
+            onUpdate: cascade
 
         - createTable:
             tableName: contact_types
@@ -98,8 +102,7 @@ databaseChangeLog:
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_resume_applicant_id
-                    references: users(id)
+
               - column:
                   name: name
                   type: varchar(100)
@@ -110,7 +113,6 @@ databaseChangeLog:
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_resume_category_id
               - column:
                   name: salary
                   type: double
@@ -127,6 +129,23 @@ databaseChangeLog:
               - column:
                   name: update_time
                   type: timestamp
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: applicant_id
+            constraintName: fk_resume_applicant_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: cascade
+            onUpdate: cascade
+
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: category_id
+            constraintName: fk_resume_category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            onDelete: RESTRICT
+            onUpdate: cascade
 
         - createTable:
             tableName: contacts_info
@@ -143,20 +162,35 @@ databaseChangeLog:
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_contacts_info_contact_types
-                    references: contact_types(id)
+
               - column:
                   name: resume_id
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_contacts_info
-                    references: resumes(id)
+
               - column:
                   name: info_value
                   type: varchar(55)
                   constraints:
                     nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: contacts_info
+            baseColumnNames: type_id
+            constraintName: fk_contacts_info_contact_types
+            referencedTableName: contact_types
+            referencedColumnNames: id
+            onDelete: RESTRICT
+            onUpdate: cascade
+
+        - addForeignKeyConstraint:
+            baseTableName: contacts_info
+            baseColumnNames: resume_id
+            constraintName: fk_contacts_info
+            referencedTableName: resumes
+            referencedColumnNames: id
+            onDelete: cascade
+            onUpdate: cascade
 
         - createTable:
             tableName: vacancies
@@ -181,8 +215,6 @@ databaseChangeLog:
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_vacancies_category
-                    references: categories(id)
               - column:
                   name: salary
                   type: double
@@ -202,8 +234,6 @@ databaseChangeLog:
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_vacancies_author
-                    references: users(id)
               - column:
                   name: created_date
                   type: timestamp
@@ -212,6 +242,23 @@ databaseChangeLog:
               - column:
                   name: update_time
                   type: timestamp
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: category_id
+            constraintName: fk_vacancies_category
+            referencedTableName: categories
+            referencedColumnNames: id
+            onDelete: RESTRICT
+            onUpdate: cascade
+
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: author_id
+            constraintName: fk_vacancies_author
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: cascade
+            onUpdate: cascade
 
 
         - createTable:
@@ -229,8 +276,6 @@ databaseChangeLog:
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_resume_work_exp
-                    references: resumes(id)
               - column:
                   name: years
                   type: int
@@ -245,6 +290,15 @@ databaseChangeLog:
               - column:
                   name: responsibilities
                   type: varchar(55)
+
+        - addForeignKeyConstraint:
+            baseTableName: work_experience_info
+            baseColumnNames: resume_id
+            constraintName: fk_resume_work_exp
+            referencedTableName: resumes
+            referencedColumnNames: id
+            onDelete: cascade
+            onUpdate: cascade
 
         - createTable:
             tableName: responded_applicants
@@ -261,21 +315,34 @@ databaseChangeLog:
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_resume_responded_applicants
-                    references: resumes(id)
               - column:
                   name: vacancy_id
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_vacancy_responded_applicants
-                    references: vacancies(id)
               - column:
                   name: confirmation
                   type: boolean
                   constraints:
                     nullable: false
 
+        - addForeignKeyConstraint:
+            baseTableName: responded_applicants
+            baseColumnNames: resume_id
+            constraintName: fk_resume_responded_applicants
+            referencedTableName: resumes
+            referencedColumnNames: id
+            onDelete: cascade
+            onUpdate: cascade
+
+        - addForeignKeyConstraint:
+            baseTableName: responded_applicants
+            baseColumnNames: vacancy_id
+            constraintName: fk_vacancy_responded_applicants
+            referencedTableName: vacancies
+            referencedColumnNames: id
+            onDelete: cascade
+            onUpdate: cascade
 
         - createTable:
             tableName: messages
@@ -292,8 +359,6 @@ databaseChangeLog:
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_responded_applicants
-                    references: users(id)
               - column:
                   name: content
                   type: varchar
@@ -304,6 +369,16 @@ databaseChangeLog:
                   type: timestamp
                   constraints:
                     nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: messages
+            baseColumnNames: responded_applicants_id
+            constraintName: fk_responded_applicants
+            referencedTableName: responded_applicants
+            referencedColumnNames: id
+            onDelete: cascade
+            onUpdate: cascade
+
 
         - createTable:
             tableName: education_info
@@ -320,8 +395,6 @@ databaseChangeLog:
                   type: long
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_education_info_resume
-                    references: resumes(id)
               - column:
                   name: institution
                   type: varchar
@@ -337,3 +410,12 @@ databaseChangeLog:
               - column:
                   name: degree
                   type: varchar
+
+        - addForeignKeyConstraint:
+            baseTableName: education_info
+            baseColumnNames: resume_id
+            constraintName: fk_education_info_resume
+            referencedTableName: resumes
+            referencedColumnNames: id
+            onDelete: cascade
+            onUpdate: cascade
