@@ -1,10 +1,16 @@
 package kg.attractor.jobsearch.service;
 
+import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
+import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 
 import java.util.List;
 
 public interface ResumeService {
+    void createExperience(WorkExperienceInfoDto expDto);
+
+    void createEducation(EducationInfoDto educationDto);
+
     void create(ResumeDto resumeDto);
 
     void editById(ResumeDto resumeDto, Long id);

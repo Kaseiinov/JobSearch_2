@@ -1,7 +1,9 @@
 package kg.attractor.jobsearch.controller;
 
 import jakarta.validation.Valid;
+import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
+import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,18 @@ public class ResumeController {
     @PostMapping
     public ResponseEntity<Void> createResume(@RequestBody @Valid ResumeDto resumeDto) {
         resumeService.create(resumeDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/education")
+    public ResponseEntity<Void> createEducation(@RequestBody @Valid EducationInfoDto educationDto) {
+        resumeService.createEducation(educationDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/experience")
+    public ResponseEntity<Void> createExperience(@RequestBody @Valid WorkExperienceInfoDto expDto) {
+        resumeService.createExperience(expDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

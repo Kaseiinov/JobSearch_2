@@ -14,7 +14,6 @@ import kg.attractor.jobsearch.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +24,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
     private final ResumeDao resumeDao;
+
+    @Override
+    public void createExperience(WorkExperienceInfoDto expDto) {
+        WorkExperienceInfo exp = expBuilderToModel(expDto);
+        resumeDao.createExperience(exp);
+    }
+
+    @Override
+    public void createEducation(EducationInfoDto educationDto){
+        EducationInfo education = educationBuilderToModel(educationDto);
+        resumeDao.createEducation(education);
+    }
 
     @Override
     public void create(ResumeDto resumeDto){
@@ -71,6 +82,29 @@ public class ResumeServiceImpl implements ResumeService {
     public ResumeDto findResumeById(Long id){
         Resume resume = resumeDao.findById(id).orElseThrow(ResumeNotFoundException::new);
         return resumeBuilder(resume);
+    }
+
+    public WorkExperienceInfo expBuilderToModel(WorkExperienceInfoDto expDto) {
+        return WorkExperienceInfo
+                .builder()
+                .resumeId(expDto.getResumeId())
+                .years(expDto.getYears())
+                .companyName(expDto.getCompanyName())
+                .position(expDto.getPosition())
+                .responsibilities(expDto.getResponsibilities())
+                .build();
+    }
+
+    public EducationInfo educationBuilderToModel(EducationInfoDto educationDto){
+        return EducationInfo
+                .builder()
+                .resumeId(educationDto.getResumeId())
+                .institution(educationDto.getInstitution())
+                .program(educationDto.getProgram())
+                .startDate(educationDto.getStartDate())
+                .endDate(educationDto.getEndDate())
+                .degree(educationDto.getDegree())
+                .build();
     }
 
     public Resume resumeDtoBuilderToModel(ResumeDto resumeDto){

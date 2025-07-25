@@ -31,7 +31,6 @@ public class ResumeDto {
     private Boolean isActive;
     @Past
     private LocalDateTime createdDate;
-    @Future
     private LocalDateTime updateTime;
     private List<WorkExperienceInfoDto> workExperience;
     private List<EducationInfoDto> educations;

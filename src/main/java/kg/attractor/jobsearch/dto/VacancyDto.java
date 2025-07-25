@@ -36,7 +36,6 @@ public class VacancyDto {
     private Long authorId;
     @Past
     private LocalDateTime createdDate;
-    @Future
     private LocalDateTime updateTime;
 
     public String getCreatedDateFormatted() {

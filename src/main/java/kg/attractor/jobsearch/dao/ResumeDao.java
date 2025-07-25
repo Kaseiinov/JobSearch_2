@@ -24,6 +24,37 @@ public class ResumeDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public void createExperience(WorkExperienceInfo exp){
+        String sql = "insert into WORK_EXPERIENCE_INFO(resume_id, years, COMPANY_NAME, POSITION, RESPONSIBILITIES)" +
+                "values((select id from resumes where id = :resumeId), :years, :companyName, :position, :responsibilities);";
+
+
+        namedParameterJdbcTemplate.update(sql,
+                new MapSqlParameterSource()
+                        .addValue("resumeId", exp.getResumeId())
+                        .addValue("years", exp.getYears())
+                        .addValue("companyName", exp.getCompanyName())
+                        .addValue("position", exp.getPosition())
+                        .addValue("responsibilities", exp.getResponsibilities())
+        ) ;
+
+    }
+
+    public void createEducation(EducationInfo educationInfo){
+        String sql = "insert into education_info(resume_id, institution, program, start_date, end_date, degree) " +
+                "values((select id from resumes where id = :resumeId), :institution, :program, :startDate, :endDate, :degree);";
+
+        namedParameterJdbcTemplate.update(sql,
+                new MapSqlParameterSource()
+                        .addValue("resumeId", educationInfo.getResumeId())
+                        .addValue("institution", educationInfo.getInstitution())
+                        .addValue("program", educationInfo.getProgram())
+                        .addValue("startDate", educationInfo.getStartDate())
+                        .addValue("endDate", educationInfo.getEndDate())
+                        .addValue("degree", educationInfo.getDegree())
+        );
+    }
+
     public void create(Resume resume){
         String sql = "insert into resumes(applicant_id, name, category_id, salary, is_active, created_date)" +
                 "values((select id from users where id = :userId), :name, (select id from categories where id = :categoryId), :salary, :is_active, :created_date);";
@@ -44,8 +75,6 @@ public class ResumeDao {
         createExperience(resume.getExperience(), generatedId);
         createContactInfo(resume.getContacts(), generatedId);
     }
-
-
 
     public void updateResumeById(Long id, Resume resume) {
         String sql = "UPDATE resumes SET " +
