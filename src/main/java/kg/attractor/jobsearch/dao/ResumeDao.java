@@ -45,53 +45,7 @@ public class ResumeDao {
         createContactInfo(resume.getContacts(), generatedId);
     }
 
-    public void createEducations(List<EducationInfo> educations, Long id){
-        String sql = "insert into education_info(resume_id, institution, program, start_date, end_date, degree)" +
-                "values((select id from resumes where id = :resumeId), :institution, :program, :start_date, :end_date, :degree);";
 
-        educations.forEach(education -> {
-            namedParameterJdbcTemplate.update(sql,
-                    new MapSqlParameterSource()
-                            .addValue("resumeId", id)
-                            .addValue("institution", education.getInstitution())
-                            .addValue("program", education.getProgram())
-                            .addValue("start_date", education.getStartDate())
-                            .addValue("end_date", education.getEndDate())
-                            .addValue("degree", education.getDegree())
-                    ) ;
-        });
-
-    }
-
-    public void createExperience(List<WorkExperienceInfo> exp, Long id){
-        String sql = "insert into WORK_EXPERIENCE_INFO(resume_id, years, COMPANY_NAME, POSITION, RESPONSIBILITIES)" +
-                "values((select id from resumes where id = :resumeId), :years, :companyName, :position, :responsibilities);";
-
-        exp.forEach(e -> {
-            namedParameterJdbcTemplate.update(sql,
-                    new MapSqlParameterSource()
-                            .addValue("resumeId", id)
-                            .addValue("years", e.getYears())
-                            .addValue("companyName", e.getCompanyName())
-                            .addValue("position", e.getPosition())
-                            .addValue("responsibilities", e.getResponsibilities())
-            ) ;
-        });
-    }
-
-    public void createContactInfo(List<ContactInfo> contact, Long id){
-        String sql = "insert into CONTACTS_INFO(TYPE_ID, RESUME_ID, INFO_VALUE)" +
-                "values(:typeId, (select id from resumes where id = :resumeId), :infoValue);";
-
-        contact.forEach(c -> {
-            namedParameterJdbcTemplate.update(sql,
-                    new MapSqlParameterSource()
-                            .addValue("resumeId", id)
-                            .addValue("typeId", c.getTypeId())
-                            .addValue("infoValue", c.getValue())
-            ) ;
-        });
-    }
 
     public void updateResumeById(Long id, Resume resume) {
         String sql = "UPDATE resumes SET " +
@@ -138,5 +92,106 @@ public class ResumeDao {
     public void deleteById(Long id){
         String sql = "delete from resumes where id = ?;";
         jdbcTemplate.update(sql, id);
+    }
+
+    public void createEducations(List<EducationInfo> educations, Long id){
+        String sql = "insert into education_info(resume_id, institution, program, start_date, end_date, degree)" +
+                "values((select id from resumes where id = :resumeId), :institution, :program, :start_date, :end_date, :degree);";
+
+        educations.forEach(education -> {
+            namedParameterJdbcTemplate.update(sql,
+                    new MapSqlParameterSource()
+                            .addValue("resumeId", id)
+                            .addValue("institution", education.getInstitution())
+                            .addValue("program", education.getProgram())
+                            .addValue("start_date", education.getStartDate())
+                            .addValue("end_date", education.getEndDate())
+                            .addValue("degree", education.getDegree())
+            ) ;
+        });
+
+    }
+
+    public void createExperience(List<WorkExperienceInfo> exp, Long id){
+        String sql = "insert into WORK_EXPERIENCE_INFO(resume_id, years, COMPANY_NAME, POSITION, RESPONSIBILITIES)" +
+                "values((select id from resumes where id = :resumeId), :years, :companyName, :position, :responsibilities);";
+
+        exp.forEach(e -> {
+            namedParameterJdbcTemplate.update(sql,
+                    new MapSqlParameterSource()
+                            .addValue("resumeId", id)
+                            .addValue("years", e.getYears())
+                            .addValue("companyName", e.getCompanyName())
+                            .addValue("position", e.getPosition())
+                            .addValue("responsibilities", e.getResponsibilities())
+            ) ;
+        });
+    }
+
+    public void createContactInfo(List<ContactInfo> contact, Long id){
+        String sql = "insert into CONTACTS_INFO(TYPE_ID, RESUME_ID, INFO_VALUE)" +
+                "values(:typeId, (select id from resumes where id = :resumeId), :infoValue);";
+
+        contact.forEach(c -> {
+            namedParameterJdbcTemplate.update(sql,
+                    new MapSqlParameterSource()
+                            .addValue("resumeId", id)
+                            .addValue("typeId", c.getTypeId())
+                            .addValue("infoValue", c.getValue())
+            ) ;
+        });
+    }
+
+    public void updateEducations(List<EducationInfo> educations, Long id){
+        String sql = "UPDATE EDUCATION_INFO SET " +
+                "INSTITUTION = :institution, " +
+                "PROGRAM = :program, " +
+                "START_DATE = :startDate, " +
+                "END_DATE = :endDate, " +
+                "degree = :degree " +
+                "WHERE id = :id";
+
+        educations.forEach(education -> {
+            namedParameterJdbcTemplate.update(sql,
+                    new MapSqlParameterSource()
+                            .addValue("resumeId", id)
+                            .addValue("institution", education.getInstitution())
+                            .addValue("program", education.getProgram())
+                            .addValue("start_date", education.getStartDate())
+                            .addValue("end_date", education.getEndDate())
+                            .addValue("degree", education.getDegree())
+            ) ;
+        });
+
+    }
+
+    public void updateExperience(List<WorkExperienceInfo> exp, Long id){
+        String sql = "insert into WORK_EXPERIENCE_INFO(resume_id, years, COMPANY_NAME, POSITION, RESPONSIBILITIES)" +
+                "values((select id from resumes where id = :resumeId), :years, :companyName, :position, :responsibilities);";
+
+        exp.forEach(e -> {
+            namedParameterJdbcTemplate.update(sql,
+                    new MapSqlParameterSource()
+                            .addValue("resumeId", id)
+                            .addValue("years", e.getYears())
+                            .addValue("companyName", e.getCompanyName())
+                            .addValue("position", e.getPosition())
+                            .addValue("responsibilities", e.getResponsibilities())
+            ) ;
+        });
+    }
+
+    public void updateContactInfo(List<ContactInfo> contact, Long id){
+        String sql = "insert into CONTACTS_INFO(TYPE_ID, RESUME_ID, INFO_VALUE)" +
+                "values(:typeId, (select id from resumes where id = :resumeId), :infoValue);";
+
+        contact.forEach(c -> {
+            namedParameterJdbcTemplate.update(sql,
+                    new MapSqlParameterSource()
+                            .addValue("resumeId", id)
+                            .addValue("typeId", c.getTypeId())
+                            .addValue("infoValue", c.getValue())
+            ) ;
+        });
     }
 }
