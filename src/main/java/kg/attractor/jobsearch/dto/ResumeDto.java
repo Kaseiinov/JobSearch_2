@@ -33,8 +33,8 @@ public class ResumeDto {
     private LocalDateTime createdDate;
     @Future
     private LocalDateTime updateTime;
-    private WorkExperienceInfoDto workExperience;
-    private EducationInfoDto education;
+    private List<WorkExperienceInfoDto> workExperience;
+    private List<EducationInfoDto> educations;
     private List<ContactsInfoDto> contacts;
 
 

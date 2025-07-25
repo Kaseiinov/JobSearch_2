@@ -1,14 +1,16 @@
 package kg.attractor.jobsearch.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class WorkExperienceInfo {
 
     private Long id;
-    private Resume resumeId;
+    private Long resumeId;
     private Integer years;
     private String companyName;
     private String position;

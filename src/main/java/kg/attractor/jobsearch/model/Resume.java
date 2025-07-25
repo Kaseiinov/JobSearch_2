@@ -19,8 +19,8 @@ public class Resume {
     private Boolean isActive;
     private LocalDateTime createdDate;
     private LocalDateTime updateTime;
-    private WorkExperienceInfo experience;
-    private EducationInfo education;
+    private List<WorkExperienceInfo> experience;
+    private List<EducationInfo> educations;
     private List<ContactInfo> contacts;
 
 }
