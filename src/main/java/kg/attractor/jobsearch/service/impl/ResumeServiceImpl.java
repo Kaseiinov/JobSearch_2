@@ -15,15 +15,30 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
     private final ResumeDao resumeDao;
+
+    @Override
+    public void updateExperienceById(WorkExperienceInfoDto expDto, Long id) {
+        WorkExperienceInfo exp = expBuilderToModel(expDto);
+        resumeDao.updateExperience(exp, id);
+    }
+
+    @Override
+    public void updateEducationById(EducationInfoDto educationDto, Long id){
+        EducationInfo education = educationBuilderToModel(educationDto);
+        resumeDao.updateEducations(education, id);
+    }
+
+    @Override
+    public void updateContactById(ContactsInfoDto contactDto, Long id){
+        ContactInfo contact = contactDtoBuilderToModel(contactDto);
+        resumeDao.updateContactInfo(contact, id);
+    }
 
     @Override
     public void createExperience(WorkExperienceInfoDto expDto) {
@@ -35,6 +50,12 @@ public class ResumeServiceImpl implements ResumeService {
     public void createEducation(EducationInfoDto educationDto){
         EducationInfo education = educationBuilderToModel(educationDto);
         resumeDao.createEducation(education);
+    }
+
+    @Override
+    public void createContact(ContactsInfoDto contactDto){
+        ContactInfo contact = contactDtoBuilderToModel(contactDto);
+        resumeDao.createContact(contact);
     }
 
     @Override
@@ -84,6 +105,15 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeBuilder(resume);
     }
 
+    public ContactInfo contactDtoBuilderToModel(ContactsInfoDto contactDto){
+        return ContactInfo
+                .builder()
+                .typeId(contactDto.getTypeId())
+                .resumeId(contactDto.getResumeId())
+                .value(contactDto.getValue())
+                .build();
+    }
+
     public WorkExperienceInfo expBuilderToModel(WorkExperienceInfoDto expDto) {
         return WorkExperienceInfo
                 .builder()
@@ -115,39 +145,39 @@ public class ResumeServiceImpl implements ResumeService {
                 .salary(resumeDto.getSalary())
                 .isActive(resumeDto.getIsActive())
                 .createdDate(LocalDateTime.now())
-                .educations(Optional.ofNullable(resumeDto.getEducations())
-                        .orElseGet(Collections::emptyList)
-                        .stream()
-                        .filter(Objects::nonNull)
-                        .map(edu -> EducationInfo.builder()
-                                .resumeId(edu.getResumeId())
-                                .institution(edu.getInstitution())
-                                .program(edu.getProgram())
-                                .startDate(edu.getStartDate())
-                                .endDate(edu.getEndDate())
-                                .degree(edu.getDegree())
-                                .build())
-                        .toList())
-                .experience(Optional.ofNullable(resumeDto.getWorkExperience())
-                        .orElseGet(Collections::emptyList)
-                        .stream()
-                        .map(exp -> WorkExperienceInfo
-                                .builder()
-                                .resumeId(exp.getResumeId())
-                                .years(exp.getYears())
-                                .companyName(exp.getCompanyName())
-                                .position(exp.getPosition())
-                                .responsibilities(exp.getResponsibilities())
-                                .build()).toList())
-                .contacts(Optional.ofNullable(resumeDto.getContacts())
-                        .orElseGet(Collections::emptyList)
-                        .stream()
-                        .map(con -> ContactInfo
-                                .builder()
-                                .typeId(con.getTypeId())
-                                .resumeId(con.getResumeId())
-                                .value(con.getValue())
-                                .build()).toList())
+//                .educations(Optional.ofNullable(resumeDto.getEducations())
+//                        .orElseGet(Collections::emptyList)
+//                        .stream()
+//                        .filter(Objects::nonNull)
+//                        .map(edu -> EducationInfo.builder()
+//                                .resumeId(edu.getResumeId())
+//                                .institution(edu.getInstitution())
+//                                .program(edu.getProgram())
+//                                .startDate(edu.getStartDate())
+//                                .endDate(edu.getEndDate())
+//                                .degree(edu.getDegree())
+//                                .build())
+//                        .toList())
+//                .experience(Optional.ofNullable(resumeDto.getWorkExperience())
+//                        .orElseGet(Collections::emptyList)
+//                        .stream()
+//                        .map(exp -> WorkExperienceInfo
+//                                .builder()
+//                                .resumeId(exp.getResumeId())
+//                                .years(exp.getYears())
+//                                .companyName(exp.getCompanyName())
+//                                .position(exp.getPosition())
+//                                .responsibilities(exp.getResponsibilities())
+//                                .build()).toList())
+//                .contacts(Optional.ofNullable(resumeDto.getContacts())
+//                        .orElseGet(Collections::emptyList)
+//                        .stream()
+//                        .map(con -> ContactInfo
+//                                .builder()
+//                                .typeId(con.getTypeId())
+//                                .resumeId(con.getResumeId())
+//                                .value(con.getValue())
+//                                .build()).toList())
                 .build();
     }
 

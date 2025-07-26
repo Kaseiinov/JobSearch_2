@@ -1,6 +1,7 @@
 package kg.attractor.jobsearch.controller;
 
 import jakarta.validation.Valid;
+import kg.attractor.jobsearch.dto.ContactsInfoDto;
 import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
@@ -33,6 +34,30 @@ public class ResumeController {
     @PostMapping("/experience")
     public ResponseEntity<Void> createExperience(@RequestBody @Valid WorkExperienceInfoDto expDto) {
         resumeService.createExperience(expDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/contact")
+    public ResponseEntity<Void> createContact(@RequestBody @Valid ContactsInfoDto contactDto) {
+        resumeService.createContact(contactDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("/education/{id}")
+    public ResponseEntity<Void> updateEducationById(@PathVariable Long id , @RequestBody @Valid EducationInfoDto educationDto) {
+        resumeService.updateEducationById(educationDto, id);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("/experience/{id}")
+    public ResponseEntity<Void> updateExperienceById(@PathVariable Long id , @RequestBody @Valid WorkExperienceInfoDto expDto) {
+        resumeService.updateExperienceById(expDto, id);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("/contact/{id}")
+    public ResponseEntity<Void> updateContactBy(@PathVariable Long id , @RequestBody @Valid ContactsInfoDto contactDto) {
+        resumeService.updateContactById(contactDto, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
