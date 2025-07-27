@@ -14,6 +14,7 @@ import kg.attractor.jobsearch.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public void updateEducationById(EducationInfoDto educationDto, Long id){
+        if(educationDto.getStartDate().isAfter(educationDto.getEndDate()) ){
+            throw new DateTimeException("End date can't be before start date");
+        }
         EducationInfo education = educationBuilderToModel(educationDto);
         resumeDao.updateEducations(education, id);
     }
@@ -48,6 +52,9 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public void createEducation(EducationInfoDto educationDto){
+        if(educationDto.getStartDate().isAfter(educationDto.getEndDate()) ){
+            throw new DateTimeException("End date can't be before start date");
+        }
         EducationInfo education = educationBuilderToModel(educationDto);
         resumeDao.createEducation(education);
     }

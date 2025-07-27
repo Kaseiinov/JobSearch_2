@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.DateTimeException;
+
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalControllerAdvice {
@@ -26,6 +28,10 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(NumberFormatException.class)
     public ErrorResponse numberFormatHandler (NumberFormatException ex){
+        return ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, ex.getMessage()).build();
+    }
+    @ExceptionHandler(DateTimeException.class)
+    public ErrorResponse DateTimeExceptionHandler (DateTimeException ex){
         return ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, ex.getMessage()).build();
     }
 }
