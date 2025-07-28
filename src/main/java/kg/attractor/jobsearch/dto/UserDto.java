@@ -34,5 +34,6 @@ public class UserDto {
     private String accountType;
 
     private Boolean enabled;
+    @NotNull
     private Long roleId;
 }

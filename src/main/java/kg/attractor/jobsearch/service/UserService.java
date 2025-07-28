@@ -7,6 +7,8 @@ import kg.attractor.jobsearch.model.User;
 import java.util.List;
 
 public interface UserService {
+    void saveUser(UserDto userDto);
+
     void editUserById(UserEditDto userDto, Long id);
 
     List<UserDto> findAll();

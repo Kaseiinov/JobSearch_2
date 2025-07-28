@@ -12,12 +12,14 @@ import kg.attractor.jobsearch.model.Resume;
 import kg.attractor.jobsearch.model.WorkExperienceInfo;
 import kg.attractor.jobsearch.service.ResumeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
@@ -48,6 +50,7 @@ public class ResumeServiceImpl implements ResumeService {
     public void createExperience(WorkExperienceInfoDto expDto) {
         WorkExperienceInfo exp = expBuilderToModel(expDto);
         resumeDao.createExperience(exp);
+        log.info("Experience created");
     }
 
     @Override
@@ -57,18 +60,21 @@ public class ResumeServiceImpl implements ResumeService {
         }
         EducationInfo education = educationBuilderToModel(educationDto);
         resumeDao.createEducation(education);
+        log.info("Education created");
     }
 
     @Override
     public void createContact(ContactsInfoDto contactDto){
         ContactInfo contact = contactDtoBuilderToModel(contactDto);
         resumeDao.createContact(contact);
+        log.info("Contact created");
     }
 
     @Override
     public void create(ResumeDto resumeDto){
         Resume resume = resumeDtoBuilderToModel(resumeDto);
         resumeDao.create(resume);
+        log.info("Resume created");
     }
 
     @Override
