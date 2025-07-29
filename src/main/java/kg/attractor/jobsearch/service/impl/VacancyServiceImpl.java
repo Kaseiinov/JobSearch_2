@@ -9,11 +9,13 @@ import kg.attractor.jobsearch.model.Vacancy;
 import kg.attractor.jobsearch.service.UserService;
 import kg.attractor.jobsearch.service.VacancyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class VacancyServiceImpl implements VacancyService {
@@ -40,6 +42,7 @@ public class VacancyServiceImpl implements VacancyService {
                 .build();
 
         vacancyDao.create(vacancy);
+        log.info("Vacancy created: {}", vacancy.getName());
     }
 
     @Override
