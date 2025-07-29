@@ -7,14 +7,25 @@ import kg.attractor.jobsearch.exceptions.UserNotFoundException;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
+    private final PasswordEncoder encoder;
+
+    @Override
+    public void saveUser(UserDto userDto) {
+        User user = userDtoBuilderToModel(userDto);
+        userDao.saveUser(user);
+        log.info("Saved user: {}", user.getEmail());
+    }
 
     @Override
     public void editUserById(UserEditDto userDto, Long id){
@@ -50,6 +61,22 @@ public class UserServiceImpl implements UserService {
     public UserDto findByPhoneNumber(String number){
         User user = userDao.findByPhoneNumber(number).orElseThrow(UserNotFoundException::new);
         return userBuilder(user);
+    }
+
+    public User userDtoBuilderToModel(UserDto userDto){
+        return User
+                .builder()
+                .name(userDto.getName())
+                .surname(userDto.getSurname())
+                .age(userDto.getAge())
+                .email(userDto.getEmail())
+                .phoneNumber(userDto.getPhoneNumber())
+                .avatar(userDto.getAvatar())
+                .accountType(userDto.getAccountType())
+                .password(encoder.encode(userDto.getPassword()))
+                .roleId(userDto.getRoleId())
+                .enabled(userDto.getEnabled())
+                .build();
     }
 
     @Override

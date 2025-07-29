@@ -12,12 +12,14 @@ import kg.attractor.jobsearch.model.Resume;
 import kg.attractor.jobsearch.model.WorkExperienceInfo;
 import kg.attractor.jobsearch.service.ResumeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
@@ -48,6 +50,7 @@ public class ResumeServiceImpl implements ResumeService {
     public void createExperience(WorkExperienceInfoDto expDto) {
         WorkExperienceInfo exp = expBuilderToModel(expDto);
         resumeDao.createExperience(exp);
+        log.info("Experience created");
     }
 
     @Override
@@ -57,18 +60,21 @@ public class ResumeServiceImpl implements ResumeService {
         }
         EducationInfo education = educationBuilderToModel(educationDto);
         resumeDao.createEducation(education);
+        log.info("Education created");
     }
 
     @Override
     public void createContact(ContactsInfoDto contactDto){
         ContactInfo contact = contactDtoBuilderToModel(contactDto);
         resumeDao.createContact(contact);
+        log.info("Contact created");
     }
 
     @Override
     public void create(ResumeDto resumeDto){
         Resume resume = resumeDtoBuilderToModel(resumeDto);
         resumeDao.create(resume);
+        log.info("Resume created");
     }
 
     @Override
@@ -200,35 +206,35 @@ public class ResumeServiceImpl implements ResumeService {
                         .isActive(r.getIsActive())
                         .createdDate(r.getCreatedDate())
                         .updateTime(r.getUpdateTime())
-                        .educations(r.getEducations()
-                                .stream()
-                                .map(edu -> EducationInfoDto
-                                        .builder()
-                                        .resumeId(edu.getResumeId())
-                                        .institution(edu.getInstitution())
-                                        .program(edu.getProgram())
-                                        .startDate(edu.getStartDate())
-                                        .endDate(edu.getEndDate())
-                                        .degree(edu.getDegree())
-                                        .build()).toList())
-                        .workExperience(r.getExperience()
-                                .stream()
-                                .map(exp -> WorkExperienceInfoDto
-                                        .builder()
-                                        .resumeId(exp.getResumeId())
-                                        .years(exp.getYears())
-                                        .companyName(exp.getCompanyName())
-                                        .position(exp.getPosition())
-                                        .responsibilities(exp.getResponsibilities())
-                                        .build()).toList())
-                        .contacts(r.getContacts()
-                                .stream()
-                                .map(con -> ContactsInfoDto
-                                        .builder()
-                                        .typeId(con.getTypeId())
-                                        .resumeId(con.getResumeId())
-                                        .value(con.getValue())
-                                        .build()).toList())
+//                        .educations(r.getEducations()
+//                                .stream()
+//                                .map(edu -> EducationInfoDto
+//                                        .builder()
+//                                        .resumeId(edu.getResumeId())
+//                                        .institution(edu.getInstitution())
+//                                        .program(edu.getProgram())
+//                                        .startDate(edu.getStartDate())
+//                                        .endDate(edu.getEndDate())
+//                                        .degree(edu.getDegree())
+//                                        .build()).toList())
+//                        .workExperience(r.getExperience()
+//                                .stream()
+//                                .map(exp -> WorkExperienceInfoDto
+//                                        .builder()
+//                                        .resumeId(exp.getResumeId())
+//                                        .years(exp.getYears())
+//                                        .companyName(exp.getCompanyName())
+//                                        .position(exp.getPosition())
+//                                        .responsibilities(exp.getResponsibilities())
+//                                        .build()).toList())
+//                        .contacts(r.getContacts()
+//                                .stream()
+//                                .map(con -> ContactsInfoDto
+//                                        .builder()
+//                                        .typeId(con.getTypeId())
+//                                        .resumeId(con.getResumeId())
+//                                        .value(con.getValue())
+//                                        .build()).toList())
                         .build())
                 .toList();
 
@@ -244,35 +250,35 @@ public class ResumeServiceImpl implements ResumeService {
                 .isActive(resume.getIsActive())
                 .createdDate(resume.getCreatedDate())
                 .updateTime(resume.getUpdateTime())
-                .educations(resume.getEducations()
-                        .stream()
-                        .map(edu -> EducationInfoDto
-                                .builder()
-                                .resumeId(edu.getResumeId())
-                                .institution(edu.getInstitution())
-                                .program(edu.getProgram())
-                                .startDate(edu.getStartDate())
-                                .endDate(edu.getEndDate())
-                                .degree(edu.getDegree())
-                                .build()).toList())
-                .workExperience(resume.getExperience()
-                        .stream()
-                        .map(exp -> WorkExperienceInfoDto
-                                .builder()
-                                .resumeId(exp.getResumeId())
-                                .years(exp.getYears())
-                                .companyName(exp.getCompanyName())
-                                .position(exp.getPosition())
-                                .responsibilities(exp.getResponsibilities())
-                                .build()).toList())
-                .contacts(resume.getContacts()
-                        .stream()
-                        .map(con -> ContactsInfoDto
-                                .builder()
-                                .typeId(con.getTypeId())
-                                .resumeId(con.getResumeId())
-                                .value(con.getValue())
-                                .build()).toList())
+//                .educations(resume.getEducations()
+//                        .stream()
+//                        .map(edu -> EducationInfoDto
+//                                .builder()
+//                                .resumeId(edu.getResumeId())
+//                                .institution(edu.getInstitution())
+//                                .program(edu.getProgram())
+//                                .startDate(edu.getStartDate())
+//                                .endDate(edu.getEndDate())
+//                                .degree(edu.getDegree())
+//                                .build()).toList())
+//                .workExperience(resume.getExperience()
+//                        .stream()
+//                        .map(exp -> WorkExperienceInfoDto
+//                                .builder()
+//                                .resumeId(exp.getResumeId())
+//                                .years(exp.getYears())
+//                                .companyName(exp.getCompanyName())
+//                                .position(exp.getPosition())
+//                                .responsibilities(exp.getResponsibilities())
+//                                .build()).toList())
+//                .contacts(resume.getContacts()
+//                        .stream()
+//                        .map(con -> ContactsInfoDto
+//                                .builder()
+//                                .typeId(con.getTypeId())
+//                                .resumeId(con.getResumeId())
+//                                .value(con.getValue())
+//                                .build()).toList())
                 .build();
 
     }

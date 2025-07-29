@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: Add_role_id_to_user
+      author: Kaseiinov_I
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: role_id
+            constraintName: fk_users_role_id
+            referencedTableName: roles
+            referencedColumnNames: id
+            onDelete: restrict
+            onUpdate: cascade
+        - sql:
+            sql: |
+              UPDATE users 
+              SET role_id = (SELECT id FROM roles WHERE role_name = 'applicant' limit 1)
+              WHERE id IN (1, 2);
+              UPDATE users 
+              SET role_id = (SELECT id FROM roles WHERE role_name = 'employer' limit 1)
+              WHERE id IN (3, 4);
+      rollback:
+        - dropColumn:
+            tableName: users
+            columnName: role_id

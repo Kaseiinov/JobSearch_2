@@ -1,8 +1,8 @@
 insert into users(name, surname, age, email, password, phone_number, avatar, account_type)
-values ('John', 'Doe', 28, 'john.doe@example.com', 'qwe', '+1234567890', null, 'applicant'),
-       ('Alice', 'Smith', 32, 'alice.smith@example.com', 'qwe', '+1987654321', null, 'applicant'),
-       ('TechCorp', 'Ltd', NULL, 'hr@techcorp.com', 'qwe', '+1122334455', null, 'employer'),
-       ('DataSystems', 'Inc', NULL, 'careers@datasys.io', 'qwe', '+5566778899', null, 'employer');
+values ('John', 'Doe', 28, 'john.doe@example.com', '$2a$10$6asNSFuS0OsD4Pnk5httR.vB0qXFScIauXb/DAv.hK6eVZiwgeuFe', '+1234567890', null, 'applicant'), // password -> qwe
+       ('Alice', 'Smith', 32, 'alice.smith@example.com', '$2a$10$6asNSFuS0OsD4Pnk5httR.vB0qXFScIauXb/DAv.hK6eVZiwgeuFe', '+1987654321', null, 'applicant'), // password -> qwe
+       ('TechCorp', 'Ltd', NULL, 'hr@techcorp.com', '$2a$10$6asNSFuS0OsD4Pnk5httR.vB0qXFScIauXb/DAv.hK6eVZiwgeuFe', '+1122334455', null, 'employer'), // password -> qwe
+       ('DataSystems', 'Inc', NULL, 'careers@datasys.io', '$2a$10$6asNSFuS0OsD4Pnk5httR.vB0qXFScIauXb/DAv.hK6eVZiwgeuFe', '+5566778899', null, 'employer'); // password -> qwe
 
 insert into contact_types(type)
 values ('Email'),

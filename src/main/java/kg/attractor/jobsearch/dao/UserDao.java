@@ -20,6 +20,26 @@ public class UserDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public void saveUser(User user){
+        String sql = "insert into users(name, surname, age, email, password, phone_number, avatar, account_type, role_id, enabled)" +
+                " values(:name, :surName, :age, :email, :password, :phoneNumber, :avatar, :accountType, :roleId, :enabled);";
+
+        namedParameterJdbcTemplate.update(sql,
+                new MapSqlParameterSource()
+                        .addValue("name", user.getName())
+                        .addValue("surName", user.getSurname())
+                        .addValue("age", user.getAge())
+                        .addValue("email", user.getEmail())
+                        .addValue("password", user.getPassword())
+                        .addValue("phoneNumber", user.getPhoneNumber())
+                        .addValue("avatar", user.getAvatar())
+                        .addValue("accountType", user.getAccountType())
+                        .addValue("roleId", user.getRoleId())
+                        .addValue("enabled", user.getEnabled())
+
+        );
+    }
+
     public void update(User user, Long id){
         String sql = "update users set " +
                 "name = :name, " +

@@ -6,8 +6,10 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 public class ResumeMapper implements RowMapper<Resume> {
     @Override
@@ -20,7 +22,9 @@ public class ResumeMapper implements RowMapper<Resume> {
         resume.setSalary(rs.getDouble("salary"));
         resume.setIsActive(rs.getBoolean("is_active"));
         resume.setCreatedDate(rs.getTimestamp("created_date").toLocalDateTime());
-        resume.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
+
+        Timestamp updateTime = rs.getTimestamp("update_time");
+        resume.setUpdateTime(updateTime != null ? updateTime.toLocalDateTime() : null);
         return resume;
     }
 }
