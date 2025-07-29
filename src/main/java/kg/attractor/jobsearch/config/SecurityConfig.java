@@ -53,9 +53,18 @@ public class SecurityConfig {
                         // Resume end points
                         .requestMatchers(HttpMethod.DELETE, "/api/resumes/**").hasAuthority("admin")
                         .requestMatchers(HttpMethod.POST, "/api/resumes").hasAuthority("applicant")
-                        .requestMatchers("/api/resumes/**").hasAuthority("applicant")
+                        .requestMatchers(HttpMethod.POST, "/api/resumes/**").hasAuthority("applicant")
+                        .requestMatchers(HttpMethod.PUT, "/api/resumes/**").hasAuthority("applicant")
 
                         // Vacancy end points
+                        .requestMatchers(HttpMethod.POST, "/api/vacancies").hasAuthority("employer")
+                        .requestMatchers(HttpMethod.DELETE, "/api/vacancies/**").hasAuthority("admin")
+                        .requestMatchers(HttpMethod.PUT, "/api/vacancies/**").hasAuthority("employer")
+
+                        // Images end points
+                        .requestMatchers(HttpMethod.POST, "/api/images/**").fullyAuthenticated()
+
+
                         .anyRequest().permitAll()
                 );
         return http.build();
