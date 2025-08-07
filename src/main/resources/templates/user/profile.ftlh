@@ -30,7 +30,7 @@
                     <h5>${user.name!}</h5>
                     <p>Возраст: ${user.age!}</p>
                 </#if>
-                <a href="/users/edit/${user.email}" class="btn btn-outline-success btn-sm mt-2">Редактировать</a>
+                <a href="/users/edit" class="btn btn-outline-success btn-sm mt-2">Редактировать</a>
             </div>
         </div>
 
