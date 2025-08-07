@@ -1,0 +1,68 @@
+<#import "../layout.ftlh" as main>
+<@main.layout>
+
+    <style>
+        .card {
+            border-radius: 25px;
+        }
+
+    </style>
+
+    <h2 class="mb-4 text-center">Список резюме</h2>
+
+    <#if resumes??>
+        <#list resumes as resume>
+
+            <div class="card p-3 mb-4" >
+                <div class="d-flex align-items-start">
+                    <#if resume.user??>
+                        <#if resume.user.avatar?? && resume.user.avatar.fileName??>
+                            <img src="/images/byName/${resume.user.avatar.fileName}"
+                                 width="80"
+                                 height="80"
+                                 alt="avatar"
+                                 class="me-3 rounded">
+                        <#else>
+                    </#if>
+                        <i class="fas fa-user-circle me-3 rounded" style="font-size: 80px; color: #6c757d;"></i>
+                    </#if>
+                    <div class="flex-grow-1">
+                        <h5 class="mb-1">${resume.name}</h5>
+
+                        <#if  resume.user?? && resume.user.age?? >
+                            <div class="text-muted small">
+                                ${resume.user.age} года • <span class="text-success">Обновлено ${resume.updateTime!}</span>
+                            </div>
+                        <#else>
+                            <div class="text-muted small">
+                                <span class="text-success">Обновлено ${resume.updateTime!}</span>
+                            </div>
+                        </#if>
+
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="small mb-2">
+                    <strong>Опыт работы</strong><br>
+                    <#if resume.workExperience?? && resume.workExperience.years??>
+                        ${resume.workExperience.years}
+                    <#else>
+                        нет
+                    </#if>
+                </div>
+
+                <#if resume.workExperience?? && resume.workExperience.companyName??>
+                    <div class="small mb-2">
+                        <strong>Последнее место работы</strong><br>
+                        <span class="fw-bold">${resume.workExperience.companyName}</span><br>
+                        <a href="#" class="text-primary small">Подробнее о последнем месте</a>
+                    </div>
+                </#if>
+            </div>
+        </#list>
+    </#if>
+
+
+</@main.layout>

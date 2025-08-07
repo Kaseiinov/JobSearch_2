@@ -12,11 +12,13 @@ public interface VacancyService {
 
     void deleteById(Long id);
 
+    List<VacancyDto> findByAuthor(String email);
+
     List<VacancyDto> findVacanciesByUserResponse(String email);
 
     List<VacancyDto> findAll();
 
-    List<VacancyDto> findAllActive(boolean state);
+    List<VacancyDto> findAllActive();
 
     List<VacancyDto> findByCategory(String category);
 

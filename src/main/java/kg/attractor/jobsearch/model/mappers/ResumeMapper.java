@@ -1,4 +1,4 @@
-package kg.attractor.jobsearch.mappers;
+package kg.attractor.jobsearch.model.mappers;
 
 import kg.attractor.jobsearch.model.Resume;
 import kg.attractor.jobsearch.model.User;

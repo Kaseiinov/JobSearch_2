@@ -1,6 +1,6 @@
 package kg.attractor.jobsearch.dao;
 
-import kg.attractor.jobsearch.mappers.ResumeMapper;
+import kg.attractor.jobsearch.model.mappers.ResumeMapper;
 import kg.attractor.jobsearch.model.ContactInfo;
 import kg.attractor.jobsearch.model.EducationInfo;
 import kg.attractor.jobsearch.model.Resume;
@@ -10,12 +10,9 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -23,6 +20,11 @@ import java.util.Optional;
 public class ResumeDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public List<Resume> findAllActive(){
+        String sql = "select * from resumes where is_active = true;";
+        return jdbcTemplate.query(sql, new ResumeMapper());
+    }
 
     public void createContact(ContactInfo contact){
         String sql = "insert into CONTACTS_INFO(TYPE_ID, resume_id, INFO_VALUE)" +

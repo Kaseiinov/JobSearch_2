@@ -1,4 +1,4 @@
-package kg.attractor.jobsearch.controller;
+package kg.attractor.jobsearch.controller.api;
 
 import kg.attractor.jobsearch.dto.ImageDto;
 import kg.attractor.jobsearch.service.ImageService;
@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@RestController("restImage")
 @RequestMapping("/api/images")
 @RequiredArgsConstructor
 public class ImageController {

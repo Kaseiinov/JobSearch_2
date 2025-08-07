@@ -14,12 +14,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEditDto {
+    private Long id;
     @NotBlank
     private String name;
     @NotBlank
     private String surname;
     @Min(18)
     private Integer age;
+    private String email;
     @NotBlank
     @Size(min = 4, max = 24, message = "Length must be >= 4 and <= 24")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{4,24}$", message = "Should contain at least one uppercase letter and one lowercase letter and at least one number")

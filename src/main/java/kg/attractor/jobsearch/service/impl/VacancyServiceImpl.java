@@ -73,6 +73,12 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
+    public List<VacancyDto> findByAuthor(String email){
+        List<Vacancy> vacancies = vacancyDao.findByAuthor(email);
+        return vacancyBuilder(vacancies);
+    }
+
+    @Override
     public List<VacancyDto> findVacanciesByUserResponse(String email){
         List<Vacancy> vacancies = vacancyDao.findVacanciesByUserResponse(email);
         return vacancyBuilder(vacancies);
@@ -85,8 +91,8 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<VacancyDto> findAllActive(boolean state){
-        return null;
+    public List<VacancyDto> findAllActive(){
+        return vacancyBuilder(vacancyDao.findAllActive());
     }
 
     @Override

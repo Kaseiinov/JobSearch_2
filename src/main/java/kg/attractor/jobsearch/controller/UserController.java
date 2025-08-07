@@ -1,47 +1,49 @@
 package kg.attractor.jobsearch.controller;
 
-import jakarta.validation.Valid;
+import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
+import kg.attractor.jobsearch.dto.VacancyDto;
+import kg.attractor.jobsearch.service.ResumeService;
 import kg.attractor.jobsearch.service.UserService;
+import kg.attractor.jobsearch.service.VacancyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/users")
+@Controller
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final ResumeService resumeService;
+    private final VacancyService vacancyService;
 
-    @PutMapping("/{id}")
-    public void editById(@PathVariable Long id, @RequestBody @Valid UserEditDto userEditDto){
-        userService.editUserById(userEditDto, id);
+    @GetMapping("/profile")
+    public String profile(Model model, Authentication auth) {
+        String username = auth.getName();
+        UserDto userDto = userService.findByEmail(username);
+        if(userDto.getAccountType().equalsIgnoreCase("employer")){
+            List<VacancyDto> vacancies = vacancyService.findByAuthor(username);
+            model.addAttribute("items", vacancies);
+        }else if(userDto.getAccountType().equalsIgnoreCase("applicant")){
+            List<ResumeDto> resumes = resumeService.findByAuthor(username);
+            model.addAttribute("items", resumes);
+        }
+        model.addAttribute("user",userDto);
+        return "user/profile";
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<UserDto> searchUser(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) String phone) {
-
-        if (name != null) {
-            return ResponseEntity.ok(userService.findByName(name));
-        }
-        if (email != null) {
-            return ResponseEntity.ok(userService.findByEmail(email));
-        }
-        if (phone != null) {
-            return ResponseEntity.ok(userService.findByPhoneNumber(phone));
-        }
-
-        return ResponseEntity.badRequest().build();
+    @GetMapping("edit")
+    public String showEditUser(Model model, Authentication auth) {
+        String username = auth.getName();
+        UserEditDto userEditDto = userService.findUserEditTypeByEmail(username);
+        model.addAttribute("userEditDto", userEditDto);
+        return "auth/edit";
     }
 }

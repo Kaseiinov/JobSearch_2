@@ -16,6 +16,8 @@ public interface UserService {
 
     UserDto findByName(String name);
 
+    UserEditDto findUserEditTypeByEmail(String email);
+
     UserDto findByEmail(String email);
 
     UserDto findByPhoneNumber(String number);

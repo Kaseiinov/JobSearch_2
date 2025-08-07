@@ -1,8 +1,7 @@
 package kg.attractor.jobsearch.dao;
 
-import kg.attractor.jobsearch.mappers.ResumeMapper;
-import kg.attractor.jobsearch.mappers.UserMapper;
-import kg.attractor.jobsearch.mappers.VacancyMapper;
+import kg.attractor.jobsearch.model.mappers.UserMapper;
+import kg.attractor.jobsearch.model.mappers.VacancyMapper;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.model.Vacancy;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +19,18 @@ import java.util.Optional;
 public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public List<Vacancy> findAllActive(){
+        String sql = "select * from vacancies where is_active = true";
+        return jdbcTemplate.query(sql, new VacancyMapper());
+    }
+
+    public List<Vacancy> findByAuthor(String email){
+        String sql = "select * from vacancies v " +
+                "join users u on u.id = v.author_id " +
+                "where u.email = ?;";
+        return jdbcTemplate.query(sql, new VacancyMapper(), email);
+    }
 
     public void delete(Long id){
         String sql = "delete from vacancies where id = ?;";
