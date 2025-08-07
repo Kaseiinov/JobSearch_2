@@ -41,28 +41,36 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(AbstractHttpConfigurer::disable)
-                .logout(AbstractHttpConfigurer::disable)
+                .formLogin(login -> login
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login")
+                        .defaultSuccessUrl("/")
+                        .failureUrl("/auth/login")
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         // User end points
-                        .requestMatchers(HttpMethod.PUT, "/api/users/**").fullyAuthenticated()
+                        .requestMatchers(HttpMethod.PUT, "/users/**").fullyAuthenticated()
 
                         // Resume end points
-                        .requestMatchers(HttpMethod.DELETE, "/api/resumes/**").hasAuthority("admin")
-                        .requestMatchers(HttpMethod.POST, "/api/resumes").hasAuthority("applicant")
-                        .requestMatchers(HttpMethod.POST, "/api/resumes/**").hasAuthority("applicant")
-                        .requestMatchers(HttpMethod.PUT, "/api/resumes/**").hasAuthority("applicant")
+                        .requestMatchers(HttpMethod.DELETE, "/resumes/**").hasAuthority("admin")
+                        .requestMatchers(HttpMethod.POST, "/resumes").hasAuthority("applicant")
+                        .requestMatchers(HttpMethod.POST, "/resumes/**").hasAuthority("applicant")
+                        .requestMatchers(HttpMethod.PUT, "/aresumes/**").hasAuthority("applicant")
 
                         // Vacancy end points
-                        .requestMatchers(HttpMethod.POST, "/api/vacancies").hasAuthority("employer")
-                        .requestMatchers(HttpMethod.DELETE, "/api/vacancies/**").hasAuthority("admin")
-                        .requestMatchers(HttpMethod.PUT, "/api/vacancies/**").hasAuthority("employer")
+                        .requestMatchers(HttpMethod.POST, "/vacancies").hasAuthority("employer")
+                        .requestMatchers(HttpMethod.DELETE, "/vacancies/**").hasAuthority("admin")
+                        .requestMatchers(HttpMethod.PUT, "/vacancies/**").hasAuthority("employer")
 
                         // Images end points
-                        .requestMatchers(HttpMethod.POST, "/api/images/**").fullyAuthenticated()
+                        .requestMatchers(HttpMethod.POST, "/images/**").fullyAuthenticated()
 
 
                         .anyRequest().permitAll()
