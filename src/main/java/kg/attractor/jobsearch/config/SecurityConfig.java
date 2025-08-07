@@ -55,6 +55,9 @@ public class SecurityConfig {
                         .permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
+                        //Auth end points
+                        .requestMatchers("/users/profile").fullyAuthenticated()
+
                         // User end points
                         .requestMatchers(HttpMethod.PUT, "/users/**").fullyAuthenticated()
 

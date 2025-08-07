@@ -6,9 +6,9 @@
     <div class="text-center mb-4">
         <h2 style="color: red;">
             Личный кабинет
-            <#if user.accountType == "EMPLOYER">
+            <#if user.accountType == "employer">
                 Работодателя
-            <#elseif user.accountType == "APPLICANT">
+            <#elseif user.accountType == "applicant">
                 Соискателя
             </#if>
         </h2>
@@ -24,9 +24,9 @@
             </#if>
 
             <div>
-                <#if user.accountType == "EMPLOYER">
+                <#if user.accountType == "employer">
                     <h5>${user.name!}</h5>
-                <#elseif user.accountType == "APPLICANT">
+                <#elseif user.accountType == "applicant">
                     <h5>${user.name!}</h5>
                     <p>Возраст: ${user.age!}</p>
                 </#if>
@@ -35,12 +35,12 @@
         </div>
 
         <div>
-            <#if user.accountType == "APPLICANT">
+            <#if user.accountType == "applicant">
                 <a href="/resumes/create" class="btn btn-outline-danger">+ Создать резюме</a>
-            <#elseif user.accountType == "EMPLOYER">
+            <#elseif user.accountType == "employer">
                 <a href="/vacancies/create" class="btn btn-outline-danger">+ Создать вакансию</a>
             </#if>
-            <#if user.accountType == "APPLICANT">
+            <#if user.accountType == "applicant">
                 <a href="#" class="btn btn-outline-secondary position-relative ms-3">
                     Отклики
                     <#--                        <#if responsesCount?? && responsesCount > 0>-->
@@ -55,7 +55,7 @@
 
     <div>
         <h5>
-            <#if user.accountType == "EMPLOYER">Созданные вакансии:<#else>Резюме:</#if>
+            <#if user.accountType == "employer">Созданные вакансии:<#else>Резюме:</#if>
         </h5>
 
         <div class="row">
@@ -67,12 +67,12 @@
                             <p class="card-text text-muted">
                                 Дата обновления: ${item.updateTimeFormatted!""}
                             </p>
-                            <#if user.accountType == "APPLICANT">
+                            <#if user.accountType == "applicant">
                                 <div class="d-flex justify-content-between">
                                     <a href="/resumes/update/${item.id}" class="btn btn-outline-primary btn-sm">Обновить</a>
                                     <a href="/resumes/edit/${item.id}" class="btn btn-outline-success btn-sm">Ред.</a>
                                 </div>
-                            <#elseif user.accountType == "EMPLOYER">
+                            <#elseif user.accountType == "employer">
                                 <div class="d-flex justify-content-between">
                                     <a href="/vacancies/update/${item.id}" class="btn btn-outline-primary btn-sm">Обновить</a>
                                     <a href="/vacancies/edit/${item.id}" class="btn btn-outline-success btn-sm">Ред.</a>

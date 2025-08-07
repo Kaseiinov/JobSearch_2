@@ -34,7 +34,7 @@
                         <div class="card-body p-5">
                             <h2 class="text-uppercase text-center mb-5">Create an account</h2>
 
-                            <form action="/auth/register" method="post">
+                            <form action="/auth/register" method="post" class="mt-4">
 
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <label class="form-label" for="form3Example1cg">Your first name</label>

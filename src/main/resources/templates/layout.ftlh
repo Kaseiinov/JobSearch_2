@@ -11,33 +11,85 @@
         <title>Document</title>
     </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">JobSearch</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
+
+    <#assign known = SPRING_SECURITY_CONTEXT?? >
+    <#if known>
+        <#assign
+        user = SPRING_SECURITY_CONTEXT.authentication.principal
+        name = user.getUsername()
+        >
+    </#if>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <#--                <li class="nav-item">-->
+                    <#--                    <a class="nav-link" href="/users/profile">Profile</a>-->
+                    <#--                </li>-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Vacancies
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/vacancies">Vacancies</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Resumes
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/resumes">Resumes</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+                <#--            <a href="/auth/login" class="btn btn-outline-success ">Login</a>-->
+                <#--            <a href="/auth/register" class="btn btn-outline-success ms-4">Register</a>-->
+                <#if user??>
+                    <a href="/users/profile" class="nav-link mr4-l">
+                        Profile
+                        <#--                <#list user.authorities as auth>-->
+                        <#--                    <span class="text-danger">${auth}</span>-->
+                        <#--                    <#if auth?has_next>-->
+                        <#--                        /-->
+                        <#--                    </#if>-->
+                        <#--                </#list>-->
+                    </a>
+                    <#if _csrf??>
+                        <form action="/logout" method="post">
+                            <input type="hidden" name="${(_csrf.parameterName)!'csrf'}"
+                                   value="${(_csrf.token)!'--no-token--'}"/>
+                            <button type="submit" class="btn btn-outline-info m-2"
+                                    id="logout">Logout
+                            </button>
+                        </form>
+                    <#else>
+                        <a href="/logout" class="btn btn-outline-info m-2"
+                           id="logout">Logout</a>
+                    </#if>
+                <#else>
+                    <a href="/auth/login"
+                       class="btn btn-outline-info m-2">Login</a>
+                    <a href="/auth/register"
+                       class="btn btn-outline-info m-2">Register</a>
+                </#if>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <div class="container">
         <#nested spring>
     </div>
-</body>
+
+
 </#macro>

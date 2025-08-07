@@ -20,6 +20,13 @@ public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public List<Vacancy> findByAuthor(String email){
+        String sql = "select * from vacancies v " +
+                "join users u on u.id = v.author_id " +
+                "where u.email = ?;";
+        return jdbcTemplate.query(sql, new VacancyMapper(), email);
+    }
+
     public void delete(Long id){
         String sql = "delete from vacancies where id = ?;";
         jdbcTemplate.update(sql, id);
