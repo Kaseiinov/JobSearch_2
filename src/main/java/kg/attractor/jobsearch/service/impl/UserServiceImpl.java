@@ -52,6 +52,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserEditDto findUserEditTypeByEmail(String email){
+        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        return UserEditDto
+                .builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .age(user.getAge())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .phoneNumber(user.getPhoneNumber())
+                .accountType(user.getAccountType())
+                .build();
+    }
+
+    @Override
     public UserDto findByEmail(String email){
         User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return userBuilder(user);

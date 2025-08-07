@@ -20,7 +20,6 @@ public class VacancyController {
     @GetMapping
     public ResponseEntity<List<VacancyDto>> getAllVacancies(
             @RequestParam(required = false) String category,
-            @RequestParam(required = false) Boolean active,
             @RequestParam(required = false) String userEmail) {
 
         if (userEmail != null) {
@@ -29,9 +28,7 @@ public class VacancyController {
         if (category != null) {
             return ResponseEntity.ok(vacancyService.findByCategory(category));
         }
-        if (active != null) {
-            return ResponseEntity.ok(vacancyService.findAllActive(active));
-        }
+
         return ResponseEntity.ok(vacancyService.findAll());
     }
 

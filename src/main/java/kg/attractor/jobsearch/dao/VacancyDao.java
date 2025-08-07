@@ -20,6 +20,11 @@ public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public List<Vacancy> findAllActive(){
+        String sql = "select * from vacancies where is_active = true";
+        return jdbcTemplate.query(sql, new VacancyMapper());
+    }
+
     public List<Vacancy> findByAuthor(String email){
         String sql = "select * from vacancies v " +
                 "join users u on u.id = v.author_id " +

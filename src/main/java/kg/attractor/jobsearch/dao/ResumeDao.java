@@ -21,6 +21,11 @@ public class ResumeDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public List<Resume> findAllActive(){
+        String sql = "select * from resumes where is_active = true;";
+        return jdbcTemplate.query(sql, new ResumeMapper());
+    }
+
     public void createContact(ContactInfo contact){
         String sql = "insert into CONTACTS_INFO(TYPE_ID, resume_id, INFO_VALUE)" +
                 "values(:typeId, (select id from resumes where id = :resumeId), :infoValue);";

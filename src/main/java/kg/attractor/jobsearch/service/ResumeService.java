@@ -26,6 +26,8 @@ public interface ResumeService {
 
     void deleteById(Long id);
 
+    List<ResumeDto> findAllActive();
+
     List<ResumeDto> findAll();
 
     List<ResumeDto> findByCategory(String category);

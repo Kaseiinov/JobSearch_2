@@ -2,6 +2,7 @@ package kg.attractor.jobsearch.controller;
 
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.UserDto;
+import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.service.ResumeService;
 import kg.attractor.jobsearch.service.UserService;
@@ -36,5 +37,13 @@ public class UserController {
         }
         model.addAttribute("user",userDto);
         return "user/profile";
+    }
+
+    @GetMapping("edit")
+    public String showEditUser(Model model, Authentication auth) {
+        String username = auth.getName();
+        UserEditDto userEditDto = userService.findUserEditTypeByEmail(username);
+        model.addAttribute("userEditDto", userEditDto);
+        return "auth/edit";
     }
 }

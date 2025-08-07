@@ -15,18 +15,21 @@
 
             <div class="card p-3 mb-4" >
                 <div class="d-flex align-items-start">
-                    <#if resume.user.avatar?? && resume.user.avatar.fileName??>
-                        <img src="/images/byName/${resume.user.avatar.fileName}"
-                             width="80"
-                             height="80"
-                             alt="avatar"
-                             class="me-3 rounded">
-                    <#else>
+                    <#if resume.user??>
+                        <#if resume.user.avatar?? && resume.user.avatar.fileName??>
+                            <img src="/images/byName/${resume.user.avatar.fileName}"
+                                 width="80"
+                                 height="80"
+                                 alt="avatar"
+                                 class="me-3 rounded">
+                        <#else>
+                    </#if>
                         <i class="fas fa-user-circle me-3 rounded" style="font-size: 80px; color: #6c757d;"></i>
                     </#if>
                     <div class="flex-grow-1">
                         <h5 class="mb-1">${resume.name}</h5>
-                        <#if resume.user.age??>
+
+                        <#if  resume.user?? && resume.user.age?? >
                             <div class="text-muted small">
                                 ${resume.user.age} года • <span class="text-success">Обновлено ${resume.updateTime!}</span>
                             </div>

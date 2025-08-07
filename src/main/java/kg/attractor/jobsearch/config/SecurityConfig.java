@@ -56,10 +56,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         //Auth end points
-                        .requestMatchers("/users/profile").fullyAuthenticated()
 
                         // User end points
-                        .requestMatchers(HttpMethod.PUT, "/users/**").fullyAuthenticated()
+                        .requestMatchers("/users/**").fullyAuthenticated()
 
                         // Resume end points
                         .requestMatchers(HttpMethod.DELETE, "/resumes/**").hasAuthority("admin")

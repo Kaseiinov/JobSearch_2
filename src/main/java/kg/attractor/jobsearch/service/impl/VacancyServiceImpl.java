@@ -91,8 +91,8 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<VacancyDto> findAllActive(boolean state){
-        return null;
+    public List<VacancyDto> findAllActive(){
+        return vacancyBuilder(vacancyDao.findAllActive());
     }
 
     @Override

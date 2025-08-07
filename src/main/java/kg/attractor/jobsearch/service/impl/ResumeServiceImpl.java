@@ -91,6 +91,12 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
+    public List<ResumeDto> findAllActive(){
+        List<Resume> resumes = resumeDao.findAllActive();
+        return resumeBuilder(resumes);
+    }
+
+    @Override
     public List<ResumeDto> findAll(){
         return null;
     }
