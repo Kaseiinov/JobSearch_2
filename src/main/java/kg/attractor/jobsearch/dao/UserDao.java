@@ -1,12 +1,11 @@
 package kg.attractor.jobsearch.dao;
 
-import kg.attractor.jobsearch.mappers.UserMapper;
+import kg.attractor.jobsearch.model.mappers.UserMapper;
 import kg.attractor.jobsearch.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;

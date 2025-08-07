@@ -1,4 +1,4 @@
-package kg.attractor.jobsearch.controller;
+package kg.attractor.jobsearch.controller.api;
 
 import kg.attractor.jobsearch.dto.ImageDto;
 import kg.attractor.jobsearch.service.ImageService;

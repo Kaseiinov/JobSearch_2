@@ -1,8 +1,7 @@
 package kg.attractor.jobsearch.dao;
 
-import kg.attractor.jobsearch.mappers.ResumeMapper;
-import kg.attractor.jobsearch.mappers.UserMapper;
-import kg.attractor.jobsearch.mappers.VacancyMapper;
+import kg.attractor.jobsearch.model.mappers.UserMapper;
+import kg.attractor.jobsearch.model.mappers.VacancyMapper;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.model.Vacancy;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
