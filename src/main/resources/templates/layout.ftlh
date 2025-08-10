@@ -40,6 +40,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/vacancies">Vacancies</a></li>
+                            <li><a class="dropdown-item" href="/vacancies/create">Vacancies create</a></li>
                         </ul>
                     </li>
 
