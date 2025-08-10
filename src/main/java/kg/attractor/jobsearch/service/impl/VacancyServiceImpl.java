@@ -104,7 +104,8 @@ public class VacancyServiceImpl implements VacancyService {
     @Override
     public List<UserDto> findRespondersToVacancyById(Long id){
         List<User> responders = vacancyDao.findRespondersToVacancyById(id);
-        return userService.userBuilder(responders);
+//        return userService.userBuilder(responders);
+        return null;
     }
 
     @Override

@@ -44,8 +44,8 @@
 
         <div class="mb-3">
             <label for="formFileMultiple" class="form-label">Photo</label>
-            <input type="hidden" name="avatar.userId" value="${userEditDto.id}">
-            <input name="avatar.file" class="form-control" type="file" id="formFileMultiple">
+            <input type="hidden" name="userImageDto.userId" value="${userEditDto.id}">
+            <input name="userImageDto.file" class="form-control" type="file" id="formFileMultiple">
 
         </div>
 

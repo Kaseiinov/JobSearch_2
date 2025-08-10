@@ -10,6 +10,6 @@ import lombok.*;
 
 public class UserImage {
     private Long id;
-    private User user;
+    private Long userId;
     private String fileName;
 }

@@ -7,7 +7,9 @@ import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
 import kg.attractor.jobsearch.exceptions.UserNotFoundException;
 import kg.attractor.jobsearch.model.User;
+import kg.attractor.jobsearch.model.UserImage;
 import kg.attractor.jobsearch.service.UserService;
+import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PasswordEncoder encoder;
     private final RoleDao roleDao;
+    private final FileUtil fileUtil;
 
     @Override
     public void saveUser(UserDto userDto) throws EmailAlreadyExistsException {
@@ -36,22 +39,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUserById(UserEditDto userDto, Long id){
+    public void editUserByEmail(UserEditDto userDto, String email){
+        String filename = fileUtil.saveUploadFile(userDto.getUserImageDto().getFile(), "images/");
+
+        UserImage userImage = new UserImage();
+        userImage.setUserId(userDto.getId());
+        userImage.setFileName(filename);
+
         User user = User.builder()
                 .name(userDto.getName())
                 .surname(userDto.getSurname())
                 .age(userDto.getAge())
                 .phoneNumber(userDto.getPhoneNumber())
                 .accountType(userDto.getAccountType())
+                .enabled(true)
+                .avatar(userImage)
                 .build();
-        userDao.update(user, id);
+        userDao.update(user, email);
     }
 
-    @Override
-    public List<UserDto> findAll(){
-        List<User> users = userDao.findAll();
-        return userBuilder(users);
-    }
+//    @Override
+//    public List<UserDto> findAll(){
+//        List<User> users = userDao.findAll();
+//        return userBuilder(users);
+//    }
 
     @Override
     public UserDto findByName(String name){
@@ -88,6 +99,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public User userDtoBuilderToModel(UserDto userDto){
+        UserImage userImage = new UserImage();
+        userImage.setUserId(userDto.getId());
+        userImage.setFileName(userDto.getAvatar());
+
         return User
                 .builder()
                 .name(userDto.getName())
@@ -95,7 +110,7 @@ public class UserServiceImpl implements UserService {
                 .age(userDto.getAge())
                 .email(userDto.getEmail())
                 .phoneNumber(userDto.getPhoneNumber())
-                .avatar(userDto.getAvatar())
+                .avatar(userImage)
                 .accountType(userDto.getAccountType())
                 .password(encoder.encode(userDto.getPassword()))
                 .roleId(roleDao.getRoleIdByName(userDto.getAccountType()))
@@ -103,27 +118,30 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    @Override
-    public List<UserDto> userBuilder(List<User> users){
-        List<UserDto> userDtos = users
-                .stream()
-                .map(r -> UserDto.builder()
-                        .id(r.getId())
-                        .name(r.getName())
-                        .surname(r.getSurname())
-                        .age(r.getAge())
-                        .email(r.getEmail())
-                        .phoneNumber(r.getPhoneNumber())
-                        .avatar(r.getAvatar())
-                        .accountType(r.getAccountType())
-                        .password(r.getPassword())
-                        .build()).toList();
-        return userDtos;
-
-    }
+//    @Override
+//    public List<UserDto> userBuilder(List<User> users){
+//
+//
+//        List<UserDto> userDtos = users
+//                .stream()
+//                .map(r -> UserDto.builder()
+//                        .id(r.getId())
+//                        .name(r.getName())
+//                        .surname(r.getSurname())
+//                        .age(r.getAge())
+//                        .email(r.getEmail())
+//                        .phoneNumber(r.getPhoneNumber())
+//                        .avatar(r.getAvatar())
+//                        .accountType(r.getAccountType())
+//                        .password(r.getPassword())
+//                        .build()).toList();
+//        return userDtos;
+//
+//    }
 
     @Override
     public UserDto userBuilder(User user){
+
         return UserDto.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -131,7 +149,7 @@ public class UserServiceImpl implements UserService {
                 .age(user.getAge())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
-                .avatar(user.getAvatar())
+                .avatar(user.getAvatarString())
                 .accountType(user.getAccountType())
                 .password(user.getPassword())
                 .build();

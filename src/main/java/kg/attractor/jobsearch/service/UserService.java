@@ -10,9 +10,9 @@ import java.util.List;
 public interface UserService {
     void saveUser(UserDto userDto) throws EmailAlreadyExistsException;
 
-    void editUserById(UserEditDto userDto, Long id);
+    void editUserByEmail(UserEditDto userDto, String email);
 
-    List<UserDto> findAll();
+//    List<UserDto> findAll();
 
 
     UserDto findByName(String name);
@@ -23,7 +23,7 @@ public interface UserService {
 
     UserDto findByPhoneNumber(String number);
 
-    List<UserDto> userBuilder(List<User> users);
+//    List<UserDto> userBuilder(List<User> users);
 
     UserDto userBuilder(User user);
 }

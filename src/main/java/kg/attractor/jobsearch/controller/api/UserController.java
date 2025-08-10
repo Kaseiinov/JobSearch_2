@@ -16,15 +16,15 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PutMapping("/{id}")
-    public void editById(@PathVariable Long id, @RequestBody @Valid UserEditDto userEditDto){
-        userService.editUserById(userEditDto, id);
-    }
+//    @PutMapping("/{id}")
+//    public void editById(@PathVariable Long id, @RequestBody @Valid UserEditDto userEditDto){
+//        userService.editUserById(userEditDto, id);
+//    }
 
-    @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
-    }
+//    @GetMapping
+//    public ResponseEntity<List<UserDto>> getAllUsers() {
+//        return ResponseEntity.ok(userService.findAll());
+//    }
 
     @GetMapping("/search")
     public ResponseEntity<UserDto> searchUser(

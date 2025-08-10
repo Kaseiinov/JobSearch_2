@@ -44,14 +44,15 @@ public class UserDao {
         );
     }
 
-    public void update(User user, Long id){
+    public void update(User user, String email){
         String sql = "update users set " +
                 "name = :name, " +
                 "surname = :surname, " +
                 "age = :age, " +
                 "phone_number = :phoneNumber, " +
-                "account_type = :account_type " +
-                "where id = :id;";
+                "account_type = :account_type, " +
+                "avatar = :avatar " +
+                "where email = :email;";
 
         namedParameterJdbcTemplate.update(sql,
                 new MapSqlParameterSource()
@@ -60,7 +61,8 @@ public class UserDao {
                         .addValue("age", user.getAge())
                         .addValue("phoneNumber", user.getPhoneNumber())
                         .addValue("account_type", user.getAccountType())
-                        .addValue("id", id)
+                        .addValue("email", email)
+                        .addValue("avatar", user.getAvatar().getFileName())
         );
     }
 
