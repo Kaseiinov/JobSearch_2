@@ -1,18 +1,18 @@
 package kg.attractor.jobsearch.service.impl;
 
 import kg.attractor.jobsearch.dao.ResumeDao;
+import kg.attractor.jobsearch.dao.UserDao;
 import kg.attractor.jobsearch.dto.ContactsInfoDto;
 import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.exceptions.ResumeNotFoundException;
-import kg.attractor.jobsearch.model.ContactInfo;
-import kg.attractor.jobsearch.model.EducationInfo;
-import kg.attractor.jobsearch.model.Resume;
-import kg.attractor.jobsearch.model.WorkExperienceInfo;
+import kg.attractor.jobsearch.exceptions.UserNotFoundException;
+import kg.attractor.jobsearch.model.*;
 import kg.attractor.jobsearch.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.DateTimeException;
@@ -24,6 +24,46 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
     private final ResumeDao resumeDao;
+    private final UserDao userDao;
+
+    @Override
+    public void addResume(ResumeDto resumeDto, Authentication auth){
+        User user = userDao.findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
+
+        Resume resume = new Resume();
+        resume.setApplicantId(user.getId());
+        resume.setName(resumeDto.getName());
+        resume.setCategoryId(resumeDto.getCategoryId());
+        resume.setSalary(resumeDto.getSalary());
+        resume.setIsActive(resumeDto.getIsActive());
+        resume.setCreatedDate(LocalDateTime.now());
+        resume.setUpdateTime(null);
+
+        resumeDao.create(resume);
+
+
+//        if (resumeDto.getWorkExperience() != null) {
+//            WorkExperienceInfoDto experience = resumeDto.getWorkExperience();
+//            experience.setResumeId(resume.getId());
+//            addWorkExperienceInfo(experience);
+//        }
+//
+//        if (resumeDto.getEducation() != null) {
+//            EducationInfoDto education = resumeDto.getEducation();
+//            education.setResumeId(resume.getId());
+//            addEducationInfo(education);
+//        }
+//
+//        if (resumeDto.getContacts() != null) {
+//            List<ContactsInfoDto> contacts = resumeDto.getContacts().stream()
+//                    .filter(contact -> contact.getValue() != null && !contact.getValue().isBlank())
+//                    .toList();
+//
+//            contacts.forEach(contact -> {
+//                contact.setResumeId(resume.getId());
+//                addContactInfo(contact);
+//            });
+    }
 
     @Override
     public void updateExperienceById(WorkExperienceInfoDto expDto, Long id) {

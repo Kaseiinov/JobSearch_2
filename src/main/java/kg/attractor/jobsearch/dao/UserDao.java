@@ -19,6 +19,11 @@ public class UserDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public Boolean isExistsUser(String email){
+        String sql = "select exists(select 1 from users where email = ?);";
+        return jdbcTemplate.queryForObject(sql, Boolean.class, email);
+    }
+
     public void saveUser(User user){
         String sql = "insert into users(name, surname, age, email, password, phone_number, avatar, account_type, role_id, enabled)" +
                 " values(:name, :surName, :age, :email, :password, :phoneNumber, :avatar, :accountType, :roleId, :enabled);";

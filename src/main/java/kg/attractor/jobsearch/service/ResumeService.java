@@ -4,10 +4,13 @@ import kg.attractor.jobsearch.dto.ContactsInfoDto;
 import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
 public interface ResumeService {
+    void addResume(ResumeDto resumeDto, Authentication auth);
+
     void updateExperienceById(WorkExperienceInfoDto expDto, Long id);
 
     void updateEducationById(EducationInfoDto educationDto, Long id);

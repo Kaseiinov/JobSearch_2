@@ -2,12 +2,13 @@ package kg.attractor.jobsearch.service;
 
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
+import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
 import kg.attractor.jobsearch.model.User;
 
 import java.util.List;
 
 public interface UserService {
-    void saveUser(UserDto userDto);
+    void saveUser(UserDto userDto) throws EmailAlreadyExistsException;
 
     void editUserById(UserEditDto userDto, Long id);
 

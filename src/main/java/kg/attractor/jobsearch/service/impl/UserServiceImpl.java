@@ -1,8 +1,10 @@
 package kg.attractor.jobsearch.service.impl;
 
+import kg.attractor.jobsearch.dao.RoleDao;
 import kg.attractor.jobsearch.dao.UserDao;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
+import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
 import kg.attractor.jobsearch.exceptions.UserNotFoundException;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.service.UserService;
@@ -19,12 +21,18 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PasswordEncoder encoder;
+    private final RoleDao roleDao;
 
     @Override
-    public void saveUser(UserDto userDto) {
+    public void saveUser(UserDto userDto) throws EmailAlreadyExistsException {
         User user = userDtoBuilderToModel(userDto);
-        userDao.saveUser(user);
-        log.info("Saved user: {}", user.getEmail());
+        boolean isExists = userDao.isExistsUser(user.getEmail());
+        if(!isExists){
+            userDao.saveUser(user);
+            log.info("Saved user: {}", user.getEmail());
+        }else{
+            throw new EmailAlreadyExistsException();
+        }
     }
 
     @Override
@@ -90,8 +98,8 @@ public class UserServiceImpl implements UserService {
                 .avatar(userDto.getAvatar())
                 .accountType(userDto.getAccountType())
                 .password(encoder.encode(userDto.getPassword()))
-                .roleId(userDto.getRoleId())
-                .enabled(userDto.getEnabled())
+                .roleId(roleDao.getRoleIdByName(userDto.getAccountType()))
+                .enabled(true)
                 .build();
     }
 

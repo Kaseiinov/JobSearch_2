@@ -49,7 +49,10 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/resumes">Resumes</a></li>
+                            <li><a class="dropdown-item" href="/resumes/create">Resume create</a></li>
+
                         </ul>
+
                     </li>
 
                 </ul>
