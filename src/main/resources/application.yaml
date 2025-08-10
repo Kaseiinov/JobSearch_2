@@ -9,7 +9,7 @@ spring:
 #====================== DataBase ========================
 
   datasource:
-    url: jdbc:h2:./db/JobSearchDB;AUTO_SERVER=TRUE
+    url: jdbc:h2:./db/JobSearch_2DB;AUTO_SERVER=TRUE
     username: root
     password: qwerty
     driver-class-name: org.h2.Driver
