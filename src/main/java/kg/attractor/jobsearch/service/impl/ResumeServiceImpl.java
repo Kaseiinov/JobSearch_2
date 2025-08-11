@@ -2,14 +2,12 @@ package kg.attractor.jobsearch.service.impl;
 
 import kg.attractor.jobsearch.dao.ResumeDao;
 import kg.attractor.jobsearch.dao.UserDao;
-import kg.attractor.jobsearch.dto.ContactsInfoDto;
-import kg.attractor.jobsearch.dto.EducationInfoDto;
-import kg.attractor.jobsearch.dto.ResumeDto;
-import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
+import kg.attractor.jobsearch.dto.*;
 import kg.attractor.jobsearch.exceptions.ResumeNotFoundException;
 import kg.attractor.jobsearch.exceptions.UserNotFoundException;
 import kg.attractor.jobsearch.model.*;
 import kg.attractor.jobsearch.service.ResumeService;
+import kg.attractor.jobsearch.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -25,6 +23,7 @@ import java.util.List;
 public class ResumeServiceImpl implements ResumeService {
     private final ResumeDao resumeDao;
     private final UserDao userDao;
+    private final UserService userService;
 
     @Override
     public void addResume(ResumeDto resumeDto, Authentication auth){
@@ -118,8 +117,10 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public void editById(ResumeDto resumeDto, Long id){
+    public void editById(ResumeDto resumeDto, Long id, String email){
+        UserDto userDto = userService.findByEmail(email);
         Resume resume = resumeDtoBuilderToModel(resumeDto);
+        resume.setApplicantId(userDto.getId());
 
         resumeDao.updateResumeById(id, resume);
 

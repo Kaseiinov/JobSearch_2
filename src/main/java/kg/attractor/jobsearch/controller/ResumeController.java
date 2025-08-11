@@ -60,7 +60,8 @@ public class ResumeController {
     @PostMapping("edit")
     public String editResume(@Valid ResumeDto resumeDto, BindingResult bindingResult, Model model, Authentication auth) {
         if (!bindingResult.hasErrors()) {
-            resumeService.editById(resumeDto, resumeDto.getId());
+            String email = auth.getName();
+            resumeService.editById(resumeDto, resumeDto.getId(), email);
             return "redirect:/users/profile";
         }
         model.addAttribute("resumeDto", resumeDto);

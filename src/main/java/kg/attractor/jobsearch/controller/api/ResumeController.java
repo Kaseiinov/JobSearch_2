@@ -61,13 +61,13 @@ public class ResumeController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateResume(
-            @PathVariable Long id,
-            @RequestBody @Valid ResumeDto resumeDto) {
-        resumeService.editById(resumeDto, id);
-        return ResponseEntity.ok().build();
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Void> updateResume(
+//            @PathVariable Long id,
+//            @RequestBody @Valid ResumeDto resumeDto) {
+//        resumeService.editById(resumeDto, id);
+//        return ResponseEntity.ok().build();
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResume(@PathVariable Long id) {

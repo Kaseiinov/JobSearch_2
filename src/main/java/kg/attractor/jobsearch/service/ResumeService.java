@@ -25,7 +25,7 @@ public interface ResumeService {
 
     void create(ResumeDto resumeDto);
 
-    void editById(ResumeDto resumeDto, Long id);
+    void editById(ResumeDto resumeDto, Long id, String email);
 
     void deleteById(Long id);
 
