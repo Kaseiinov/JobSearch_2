@@ -58,6 +58,14 @@ public class GlobalControllerAdvice {
         return "errors/error";
     }
 
+    @ExceptionHandler(NumberFormatException.class)
+    public String handleNumberFormatException(Model model, HttpServletRequest request) {
+        model.addAttribute("status", HttpStatus.BAD_REQUEST);
+        model.addAttribute("reason", HttpStatus.BAD_REQUEST.getReasonPhrase());
+        model.addAttribute("details", request);
+        return "errors/error";
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseBody> validationHandler(MethodArgumentNotValidException e) {
         return new ResponseEntity<>(errorService.makeResponse(e.getBindingResult()), HttpStatus.BAD_REQUEST);

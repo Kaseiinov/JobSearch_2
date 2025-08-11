@@ -31,8 +31,6 @@ public class VacancyDto {
     private Integer expTo;
     @NotNull
     private Boolean isActive;
-    @NotNull
-    @Positive
     private Long authorId;
     @Past
     private LocalDateTime createdDate;

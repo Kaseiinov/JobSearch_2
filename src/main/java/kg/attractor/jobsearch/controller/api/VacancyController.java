@@ -43,13 +43,13 @@ public class VacancyController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateVacancy(
-            @PathVariable Long id,
-            @RequestBody @Valid VacancyDto vacancyDto) {
-        vacancyService.editById(vacancyDto, id);
-        return ResponseEntity.ok().build();
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Void> updateVacancy(
+//            @PathVariable Long id,
+//            @RequestBody @Valid VacancyDto vacancyDto) {
+//        vacancyService.editById(vacancyDto, id);
+//        return ResponseEntity.ok().build();
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVacancy(@PathVariable Long id) {

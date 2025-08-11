@@ -8,7 +8,7 @@ import java.util.List;
 public interface VacancyService {
     void create(VacancyDto vacancyDto);
 
-    void editById(VacancyDto vacancyDto, Long id);
+    void editById(VacancyDto vacancyDto, Long id, String email);
 
     void deleteById(Long id);
 

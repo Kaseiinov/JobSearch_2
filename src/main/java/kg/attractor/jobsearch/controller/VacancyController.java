@@ -58,9 +58,9 @@ public class VacancyController {
     }
 
     @PostMapping("edit")
-    public String editVacancy(@Valid VacancyDto vacancyDto, BindingResult bindingResult, Model model) {
+    public String editVacancy(@Valid VacancyDto vacancyDto, BindingResult bindingResult, Model model, Authentication auth) {
         if (!bindingResult.hasErrors()) {
-            vacancyService.editById( vacancyDto, vacancyDto.getId());
+            vacancyService.editById( vacancyDto, vacancyDto.getId(), auth.getName());
             return "redirect:/users/profile";
         }
         model.addAttribute("vacancyDto", vacancyDto);

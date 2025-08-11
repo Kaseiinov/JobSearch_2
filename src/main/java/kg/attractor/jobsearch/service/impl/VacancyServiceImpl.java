@@ -46,10 +46,11 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public void editById(VacancyDto vacancyDto, Long id){
+    public void editById(VacancyDto vacancyDto, Long id, String email){
         if(vacancyDto.getExpFrom() >= vacancyDto.getExpTo()){
             throw new NumberFormatException();
         }
+        UserDto userDto = userService.findByEmail(email);
 
         Vacancy vacancy = Vacancy.builder()
                 .id(vacancyDto.getId())
@@ -60,7 +61,7 @@ public class VacancyServiceImpl implements VacancyService {
                 .expFrom(vacancyDto.getExpFrom())
                 .expTo(vacancyDto.getExpTo())
                 .isActive(vacancyDto.getIsActive())
-                .authorId(vacancyDto.getAuthorId())
+                .authorId(userDto.getId())
                 .updateTime(LocalDateTime.now())
                 .build();
 
