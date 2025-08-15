@@ -28,10 +28,14 @@ public class SecurityConfig {
                 "from users " +
                 "where email = ?;";
 
-        String roleQuery = "select email, role_name " +
-                "from users u, roles r " +
-                "where u.email = ? " +
-                "and u.role_id = r.id;";
+        String roleQuery = """
+                select u.email, 
+                r.role_name
+                from users u
+                join usr_roles ur on u.id = ur.user_id
+                join roles r on r.id = ur.role_id
+                where u.email = ?;
+                """;
 
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
@@ -62,14 +66,17 @@ public class SecurityConfig {
                         .requestMatchers("/users/**").fullyAuthenticated()
 
                         // Resume end points
+                        .requestMatchers(HttpMethod.GET, "/resumes").hasAuthority("employer")
                         .requestMatchers(HttpMethod.DELETE, "/resumes/**").hasAuthority("admin")
                         .requestMatchers(HttpMethod.POST, "/resumes").hasAuthority("applicant")
                         .requestMatchers(HttpMethod.POST, "/resumes/**").hasAuthority("applicant")
-                        .requestMatchers(HttpMethod.PUT, "/aresumes/**").hasAuthority("applicant")
-                        .requestMatchers(HttpMethod.GET, "/resumes").hasAuthority("employer")
+                        .requestMatchers(HttpMethod.GET, "/resumes/**").hasAuthority("applicant")
+                        .requestMatchers(HttpMethod.PUT, "/resumes/**").hasAuthority("applicant")
 
                         // Vacancy end points
                         .requestMatchers(HttpMethod.POST, "/vacancies").hasAuthority("employer")
+                        .requestMatchers(HttpMethod.POST, "/vacancies/**").hasAuthority("employer")
+                        .requestMatchers(HttpMethod.GET, "/vacancies/create").hasAuthority("employer")
                         .requestMatchers(HttpMethod.DELETE, "/vacancies/**").hasAuthority("admin")
                         .requestMatchers(HttpMethod.PUT, "/vacancies/**").hasAuthority("employer")
 

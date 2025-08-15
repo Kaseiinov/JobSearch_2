@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: create intermadiate tables for roles authorities and users
+      author: Kaseiinov_I
+      changes:
+        - createTable:
+            tableName: roles_authorities
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+              - column:
+                  name: authority_id
+                  type: bigint
+
+        - addForeignKeyConstraint:
+            baseTableName: roles_authorities
+            baseColumnNames: role_id
+            constraintName: fk_roles_authorities_role_id
+            referencedTableName: roles
+            referencedColumnNames: id
+            onDelete: RESTRICT
+            onUpdate: cascade
+
+        - addForeignKeyConstraint:
+            baseTableName: roles_authorities
+            baseColumnNames: authority_id
+            constraintName: fk_roles_authorities_authority_id
+            referencedTableName: authorities
+            referencedColumnNames: id
+            onDelete: RESTRICT
+            onUpdate: cascade
+
+        - createTable:
+            tableName: usr_roles
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+              - column:
+                  name: user_id
+                  type: bigint
+
+        - addForeignKeyConstraint:
+            baseTableName: usr_roles
+            baseColumnNames: role_id
+            constraintName: fk_usr_roles_role_id
+            referencedTableName: roles
+            referencedColumnNames: id
+            onDelete: RESTRICT
+            onUpdate: cascade
+
+        - addForeignKeyConstraint:
+            baseTableName: usr_roles
+            baseColumnNames: user_id
+            constraintName: fk_usr_roles_user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: RESTRICT
+            onUpdate: cascade

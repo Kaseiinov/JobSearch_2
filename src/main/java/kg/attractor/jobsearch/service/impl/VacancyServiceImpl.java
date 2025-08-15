@@ -1,11 +1,13 @@
 package kg.attractor.jobsearch.service.impl;
 
-import kg.attractor.jobsearch.dao.VacancyDao;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.exceptions.VacancyNotFoundException;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.model.Vacancy;
+import kg.attractor.jobsearch.repository.CategoryRepository;
+import kg.attractor.jobsearch.repository.VacancyRepository;
+import kg.attractor.jobsearch.service.CategoryService;
 import kg.attractor.jobsearch.service.UserService;
 import kg.attractor.jobsearch.service.VacancyService;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +21,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class VacancyServiceImpl implements VacancyService {
-    private final VacancyDao vacancyDao;
     private final UserService userService;
+    private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
+    private final VacancyRepository vacancyRepository;
 
     @Override
-    public void create(VacancyDto vacancyDto){
+    public void create(VacancyDto vacancyDto, String email){
         if(vacancyDto.getExpFrom() >= vacancyDto.getExpTo()){
             throw new NumberFormatException();
         }
@@ -32,16 +36,16 @@ public class VacancyServiceImpl implements VacancyService {
                 .id(vacancyDto.getId())
                 .name(vacancyDto.getName())
                 .description(vacancyDto.getDescription())
-                .categoryId(vacancyDto.getCategoryId())
+                .category(categoryService.findModelCategoryById(vacancyDto.getCategoryId()))
                 .salary(vacancyDto.getSalary())
                 .expFrom(vacancyDto.getExpFrom())
                 .expTo(vacancyDto.getExpTo())
                 .isActive(vacancyDto.getIsActive())
-                .authorId(vacancyDto.getAuthorId())
+                .author(userService.findModelUserByEmail(email))
                 .createdDate(LocalDateTime.now())
                 .build();
 
-        vacancyDao.create(vacancy);
+        vacancyRepository.save(vacancy);
         log.info("Vacancy created: {}", vacancy.getName());
     }
 
@@ -50,68 +54,63 @@ public class VacancyServiceImpl implements VacancyService {
         if(vacancyDto.getExpFrom() >= vacancyDto.getExpTo()){
             throw new NumberFormatException();
         }
-        UserDto userDto = userService.findByEmail(email);
+        Vacancy vacancy = vacancyRepository.findById(id).orElseThrow(VacancyNotFoundException::new);
+        vacancy.setName(vacancyDto.getName());
+        vacancy.setDescription(vacancyDto.getDescription());
+        vacancy.setCategory(categoryService.findModelCategoryById(vacancyDto.getCategoryId()));
+        vacancy.setSalary(vacancyDto.getSalary());
+        vacancy.setExpFrom(vacancyDto.getExpFrom());
+        vacancy.setExpTo(vacancyDto.getExpTo());
+        vacancy.setIsActive(vacancyDto.getIsActive());
+        vacancy.setUpdateTime(LocalDateTime.now());
 
-        Vacancy vacancy = Vacancy.builder()
-                .id(vacancyDto.getId())
-                .name(vacancyDto.getName())
-                .description(vacancyDto.getDescription())
-                .categoryId(vacancyDto.getCategoryId())
-                .salary(vacancyDto.getSalary())
-                .expFrom(vacancyDto.getExpFrom())
-                .expTo(vacancyDto.getExpTo())
-                .isActive(vacancyDto.getIsActive())
-                .authorId(userDto.getId())
-                .updateTime(LocalDateTime.now())
-                .build();
-
-        vacancyDao.update(id, vacancy);
+        vacancyRepository.save(vacancy);
     }
 
     @Override
     public void deleteById(Long id){
-        vacancyDao.delete(id);
+        vacancyRepository.deleteById(id);
     }
 
     @Override
     public List<VacancyDto> findByAuthor(String email){
-        List<Vacancy> vacancies = vacancyDao.findByAuthor(email);
+        List<Vacancy> vacancies = vacancyRepository.findVacanciesByAuthor_Email(email);
         return vacancyBuilder(vacancies);
     }
 
-    @Override
-    public List<VacancyDto> findVacanciesByUserResponse(String email){
-        List<Vacancy> vacancies = vacancyDao.findVacanciesByUserResponse(email);
-        return vacancyBuilder(vacancies);
-    }
+//    @Override
+//    public List<VacancyDto> findVacanciesByUserResponse(String email){
+//        List<Vacancy> vacancies = vacancyDao.findVacanciesByUserResponse(email);
+//        return vacancyBuilder(vacancies);
+//    }
 
     @Override
     public List<VacancyDto> findAll(){
-        List<Vacancy> vacancies = vacancyDao.findAll();
+        List<Vacancy> vacancies = vacancyRepository.findAll();
         return vacancyBuilder(vacancies);
     }
 
     @Override
     public List<VacancyDto> findAllActive(){
-        return vacancyBuilder(vacancyDao.findAllActive());
+        return vacancyBuilder(vacancyRepository.findVacanciesByIsActive(true));
     }
 
     @Override
     public List<VacancyDto> findByCategory(String category){
-        List<Vacancy> vacancies = vacancyDao.findByCategory(category);
+        List<Vacancy> vacancies = vacancyRepository.findByCategory_Name(category);
         return vacancyBuilder(vacancies);
     }
 
-    @Override
-    public List<UserDto> findRespondersToVacancyById(Long id){
-        List<User> responders = vacancyDao.findRespondersToVacancyById(id);
-//        return userService.userBuilder(responders);
-        return null;
-    }
+//    @Override
+//    public List<UserDto> findRespondersToVacancyById(Long id){
+//        List<User> responders = vacancyDao.findRespondersToVacancyById(id);
+////        return userService.userBuilder(responders);
+//        return null;
+//    }
 
     @Override
     public VacancyDto findVacancyById(Long id){
-        Vacancy vacancy = vacancyDao.findById(id).orElseThrow(VacancyNotFoundException::new);
+        Vacancy vacancy = vacancyRepository.findById(id).orElseThrow(VacancyNotFoundException::new);
         return vacancyBuilder(vacancy);
     }
 
@@ -122,12 +121,12 @@ public class VacancyServiceImpl implements VacancyService {
                         .id(r.getId())
                         .name(r.getName())
                         .description(r.getDescription())
-                        .categoryId(r.getCategoryId())
+                        .categoryId(r.getCategory().getId())
                         .salary(r.getSalary())
                         .isActive(r.getIsActive())
                         .expFrom(r.getExpFrom())
                         .expTo(r.getExpTo())
-                        .authorId(r.getAuthorId())
+                        .authorId(r.getAuthor().getId())
                         .createdDate(r.getCreatedDate())
                         .updateTime(r.getUpdateTime())
                         .build()).toList();
@@ -140,12 +139,12 @@ public class VacancyServiceImpl implements VacancyService {
                 .id(vacancy.getId())
                 .name(vacancy.getName())
                 .description(vacancy.getDescription())
-                .categoryId(vacancy.getCategoryId())
+                .categoryId(vacancy.getCategory().getId())
                 .salary(vacancy.getSalary())
                 .isActive(vacancy.getIsActive())
                 .expFrom(vacancy.getExpFrom())
                 .expTo(vacancy.getExpTo())
-                .authorId(vacancy.getAuthorId())
+                .authorId(vacancy.getAuthor().getId())
                 .createdDate(vacancy.getCreatedDate())
                 .updateTime(vacancy.getUpdateTime())
                 .build();

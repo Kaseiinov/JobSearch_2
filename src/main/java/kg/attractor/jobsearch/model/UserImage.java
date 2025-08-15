@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -7,9 +8,10 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class UserImage {
+
     private Long id;
-    private Long userId;
+
+    private User user;
     private String fileName;
 }

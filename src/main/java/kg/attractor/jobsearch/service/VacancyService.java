@@ -6,7 +6,7 @@ import kg.attractor.jobsearch.dto.VacancyDto;
 import java.util.List;
 
 public interface VacancyService {
-    void create(VacancyDto vacancyDto);
+    void create(VacancyDto vacancyDto, String email);
 
     void editById(VacancyDto vacancyDto, Long id, String email);
 
@@ -14,7 +14,7 @@ public interface VacancyService {
 
     List<VacancyDto> findByAuthor(String email);
 
-    List<VacancyDto> findVacanciesByUserResponse(String email);
+//    List<VacancyDto> findVacanciesByUserResponse(String email);
 
     List<VacancyDto> findAll();
 
@@ -22,7 +22,7 @@ public interface VacancyService {
 
     List<VacancyDto> findByCategory(String category);
 
-    List<UserDto> findRespondersToVacancyById(Long id);
+//    List<UserDto> findRespondersToVacancyById(Long id);
 
     VacancyDto findVacancyById(Long id);
 }

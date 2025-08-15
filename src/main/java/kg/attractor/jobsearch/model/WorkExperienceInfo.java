@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -7,10 +8,15 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "work_experience_info")
 public class WorkExperienceInfo {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long resumeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
     private Integer years;
     private String companyName;
     private String position;

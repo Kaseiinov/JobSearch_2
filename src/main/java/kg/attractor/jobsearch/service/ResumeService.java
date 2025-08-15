@@ -4,6 +4,7 @@ import kg.attractor.jobsearch.dto.ContactsInfoDto;
 import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
+import kg.attractor.jobsearch.model.Resume;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
@@ -40,4 +41,6 @@ public interface ResumeService {
     List<ResumeDto> findRespondersToVacancyById(Long id);
 
     ResumeDto findResumeById(Long id);
+
+    Resume findModelResumeById(Long id);
 }

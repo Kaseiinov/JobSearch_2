@@ -42,7 +42,7 @@ public class VacancyController {
     @PostMapping("create")
     public String createVacancy(@Valid VacancyDto vacancyDto, BindingResult bindingResult, Model model, Authentication auth) {
         if(!bindingResult.hasErrors()){
-            vacancyService.create(vacancyDto);
+            vacancyService.create(vacancyDto, auth.getName());
             return "redirect:/vacancies";
         }
         model.addAttribute("vacancyDto", vacancyDto);
