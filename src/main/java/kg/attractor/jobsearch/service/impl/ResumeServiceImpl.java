@@ -120,8 +120,12 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public void editById(ResumeDto resumeDto, Long id, String email){
         User user = userService.findModelUserByEmail(email);
-        Resume resume = resumeDtoBuilderToModel(resumeDto);
-        resume.setApplicant(user);
+        Resume resume = resumeRepository.findById(id).orElseThrow(ResumeNotFoundException::new);
+        resume.setName(resumeDto.getName());
+        resume.setCategory(categoryService.findModelCategoryById(resumeDto.getCategoryId()));
+        resume.setSalary(resumeDto.getSalary());
+        resume.setIsActive(resumeDto.getIsActive());
+        resume.setUpdateTime(LocalDateTime.now());
 
         resumeRepository.save(resume);
 

@@ -6,7 +6,7 @@ import kg.attractor.jobsearch.dto.VacancyDto;
 import java.util.List;
 
 public interface VacancyService {
-    void create(VacancyDto vacancyDto);
+    void create(VacancyDto vacancyDto, String email);
 
     void editById(VacancyDto vacancyDto, Long id, String email);
 

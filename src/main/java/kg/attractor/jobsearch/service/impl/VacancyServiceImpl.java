@@ -27,7 +27,7 @@ public class VacancyServiceImpl implements VacancyService {
     private final VacancyRepository vacancyRepository;
 
     @Override
-    public void create(VacancyDto vacancyDto){
+    public void create(VacancyDto vacancyDto, String email){
         if(vacancyDto.getExpFrom() >= vacancyDto.getExpTo()){
             throw new NumberFormatException();
         }
@@ -41,7 +41,7 @@ public class VacancyServiceImpl implements VacancyService {
                 .expFrom(vacancyDto.getExpFrom())
                 .expTo(vacancyDto.getExpTo())
                 .isActive(vacancyDto.getIsActive())
-                .author(userService.findModelUserById(vacancyDto.getAuthorId()))
+                .author(userService.findModelUserByEmail(email))
                 .createdDate(LocalDateTime.now())
                 .build();
 
@@ -54,20 +54,15 @@ public class VacancyServiceImpl implements VacancyService {
         if(vacancyDto.getExpFrom() >= vacancyDto.getExpTo()){
             throw new NumberFormatException();
         }
-        UserDto userDto = userService.findByEmail(email);
-
-        Vacancy vacancy = Vacancy.builder()
-                .id(vacancyDto.getId())
-                .name(vacancyDto.getName())
-                .description(vacancyDto.getDescription())
-                .category(categoryService.findModelCategoryById(vacancyDto.getCategoryId()))
-                .salary(vacancyDto.getSalary())
-                .expFrom(vacancyDto.getExpFrom())
-                .expTo(vacancyDto.getExpTo())
-                .isActive(vacancyDto.getIsActive())
-                .author(userService.findModelUserById(vacancyDto.getAuthorId()))
-                .updateTime(LocalDateTime.now())
-                .build();
+        Vacancy vacancy = vacancyRepository.findById(id).orElseThrow(VacancyNotFoundException::new);
+        vacancy.setName(vacancyDto.getName());
+        vacancy.setDescription(vacancyDto.getDescription());
+        vacancy.setCategory(categoryService.findModelCategoryById(vacancyDto.getCategoryId()));
+        vacancy.setSalary(vacancyDto.getSalary());
+        vacancy.setExpFrom(vacancyDto.getExpFrom());
+        vacancy.setExpTo(vacancyDto.getExpTo());
+        vacancy.setIsActive(vacancyDto.getIsActive());
+        vacancy.setUpdateTime(LocalDateTime.now());
 
         vacancyRepository.save(vacancy);
     }

@@ -26,8 +26,7 @@ public class User {
     private String phoneNumber;
     @Column(name = "account_type")
     private String accountType;
-    @OneToOne(fetch = FetchType.LAZY)
-    private UserImage avatar;
+    private String avatar;
     private Boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)

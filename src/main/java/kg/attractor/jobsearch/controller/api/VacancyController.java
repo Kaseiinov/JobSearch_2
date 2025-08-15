@@ -37,11 +37,11 @@ public class VacancyController {
         return ResponseEntity.ok(vacancyService.findVacancyById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<Void> createVacancy(@RequestBody @Valid VacancyDto vacancyDto) {
-        vacancyService.create(vacancyDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+//    @PostMapping
+//    public ResponseEntity<Void> createVacancy(@RequestBody @Valid VacancyDto vacancyDto) {
+//        vacancyService.create(vacancyDto);
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
 
 //    @PutMapping("/{id}")
 //    public ResponseEntity<Void> updateVacancy(

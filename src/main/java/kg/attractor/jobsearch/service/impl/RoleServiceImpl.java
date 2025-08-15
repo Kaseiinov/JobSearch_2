@@ -17,6 +17,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findByRole(name).orElseThrow(RoleNotFoundException::new);
     }
 
+
     @Override
     public Role findRoleById(Long id){
         return roleRepository.findById(id).orElseThrow(RoleNotFoundException::new);
