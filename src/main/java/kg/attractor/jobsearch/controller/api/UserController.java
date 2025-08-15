@@ -25,23 +25,23 @@ public class UserController {
 //    public ResponseEntity<List<UserDto>> getAllUsers() {
 //        return ResponseEntity.ok(userService.findAll());
 //    }
-
-    @GetMapping("/search")
-    public ResponseEntity<UserDto> searchUser(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) String phone) {
-
-        if (name != null) {
-            return ResponseEntity.ok(userService.findByName(name));
-        }
-        if (email != null) {
-            return ResponseEntity.ok(userService.findByEmail(email));
-        }
-        if (phone != null) {
-            return ResponseEntity.ok(userService.findByPhoneNumber(phone));
-        }
-
-        return ResponseEntity.badRequest().build();
-    }
+//
+//    @GetMapping("/search")
+//    public ResponseEntity<UserDto> searchUser(
+//            @RequestParam(required = false) String name,
+//            @RequestParam(required = false) String email,
+//            @RequestParam(required = false) String phone) {
+//
+//        if (name != null) {
+//            return ResponseEntity.ok(userService.findByName(name));
+//        }
+//        if (email != null) {
+//            return ResponseEntity.ok(userService.findByEmail(email));
+//        }
+//        if (phone != null) {
+//            return ResponseEntity.ok(userService.findByPhoneNumber(phone));
+//        }
+//
+//        return ResponseEntity.badRequest().build();
+//    }
 }

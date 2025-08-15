@@ -17,9 +17,16 @@ public class Role {
     private Long id;
     @Column(name = "role_name")
     private String role;
-    @OneToMany
-    @JoinColumn(name = "authority_id")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "roles_authorities",
+            joinColumns = @JoinColumn(name = "authority_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private List<Authority> authorities;
+
+    @ManyToMany(mappedBy = "roles")
+    private Collection<User> users;
 
 
 }

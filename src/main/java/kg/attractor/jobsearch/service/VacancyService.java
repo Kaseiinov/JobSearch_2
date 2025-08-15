@@ -14,7 +14,7 @@ public interface VacancyService {
 
     List<VacancyDto> findByAuthor(String email);
 
-    List<VacancyDto> findVacanciesByUserResponse(String email);
+//    List<VacancyDto> findVacanciesByUserResponse(String email);
 
     List<VacancyDto> findAll();
 
@@ -22,7 +22,7 @@ public interface VacancyService {
 
     List<VacancyDto> findByCategory(String category);
 
-    List<UserDto> findRespondersToVacancyById(Long id);
+//    List<UserDto> findRespondersToVacancyById(Long id);
 
     VacancyDto findVacancyById(Long id);
 }

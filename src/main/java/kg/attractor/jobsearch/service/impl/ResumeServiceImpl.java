@@ -24,6 +24,7 @@ public class ResumeServiceImpl implements ResumeService {
     private final WorkExperienceService workExperienceService;
     private final EducationInfoService educationInfoService;
     private final ContactInfoService contactInfoService;
+    private final ContactTypeService contactTypeService;
 
     @Override
     public void addResume(ResumeDto resumeDto, Authentication auth){
@@ -174,8 +175,8 @@ public class ResumeServiceImpl implements ResumeService {
     public ContactInfo contactDtoBuilderToModel(ContactsInfoDto contactDto){
         return ContactInfo
                 .builder()
-                .typeId(contactDto.getTypeId())
-                .resumeId(contactDto.getResumeId())
+                .type(contactTypeService.findById(contactDto.getTypeId()))
+                .resume(findModelResumeById(contactDto.getResumeId()))
                 .value(contactDto.getValue())
                 .build();
     }
@@ -194,7 +195,7 @@ public class ResumeServiceImpl implements ResumeService {
     public EducationInfo educationBuilderToModel(EducationInfoDto educationDto){
         return EducationInfo
                 .builder()
-                .resumeId(educationDto.getResumeId())
+                .resume(findModelResumeById(educationDto.getResumeId()))
                 .institution(educationDto.getInstitution())
                 .program(educationDto.getProgram())
                 .startDate(educationDto.getStartDate())

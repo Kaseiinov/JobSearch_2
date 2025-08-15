@@ -30,7 +30,12 @@ public class User {
     private UserImage avatar;
     private Boolean enabled;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "usr_roles",
+        joinColumns =@JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private Collection<Role> roles;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")

@@ -31,7 +31,14 @@ public class Resume {
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     private List<WorkExperienceInfo> experience;
-//    private List<EducationInfo> educations;
-//    private List<ContactInfo> contacts;
+
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
+    private List<EducationInfo> educations;
+
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
+    private List<ContactInfo> contacts;
+
+    @OneToMany(mappedBy = "resume")
+    private Collection<ContactInfo> contactInfos;
 
 }
