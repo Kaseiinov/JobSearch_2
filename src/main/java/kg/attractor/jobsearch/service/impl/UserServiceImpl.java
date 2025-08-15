@@ -5,6 +5,7 @@ import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
 import kg.attractor.jobsearch.exceptions.UserNotFoundException;
+import kg.attractor.jobsearch.model.Role;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.model.UserImage;
 import kg.attractor.jobsearch.repository.UserRepository;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -43,19 +45,19 @@ public class UserServiceImpl implements UserService {
     public void editUserByEmail(UserEditDto userDto, String email){
         String filename = fileUtil.saveUploadFile(userDto.getUserImageDto().getFile(), "images/");
 
-        UserImage userImage = new UserImage();
-        userImage.setUser(findModelUserById(userDto.getId()));
-        userImage.setFileName(filename);
+//        UserImage userImage = new UserImage();
+//        userImage.setUser(findModelUserById(userDto.getId()));
+//        userImage.setFileName(filename);
 
-        User user = User.builder()
-                .name(userDto.getName())
-                .surname(userDto.getSurname())
-                .age(userDto.getAge())
-                .phoneNumber(userDto.getPhoneNumber())
-                .accountType(userDto.getAccountType())
-                .enabled(true)
-                .avatar(userImage)
-                .build();
+        User user = findModelUserByEmail(email);
+        user.setName(userDto.getName());
+        user.setSurname(userDto.getSurname());
+        user.setAge(userDto.getAge());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(encoder.encode(userDto.getPassword()));
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setAvatar(filename);
+
         userRepository.save(user);
     }
 
@@ -112,9 +114,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public User userDtoBuilderToModel(UserDto userDto){
-        UserImage userImage = new UserImage();
-        userImage.setUser(findModelUserById(userDto.getId()));
-        userImage.setFileName(userDto.getAvatar());
+//        UserImage userImage = new UserImage();
+//        userImage.setUser(findModelUserById(userDto.getId()));
+//        userImage.setFileName(userDto.getAvatar());
+        Role role = roleService.findRoleByName(userDto.getAccountType());
 
         return User
                 .builder()
@@ -123,10 +126,10 @@ public class UserServiceImpl implements UserService {
                 .age(userDto.getAge())
                 .email(userDto.getEmail())
                 .phoneNumber(userDto.getPhoneNumber())
-                .avatar(userImage)
+                .avatar(userDto.getAvatar())
                 .accountType(userDto.getAccountType())
                 .password(encoder.encode(userDto.getPassword()))
-                .roles(List.of(roleService.findRoleById(userDto.getRoleId())))
+                .roles(List.of(role))
                 .enabled(true)
                 .build();
     }
@@ -162,7 +165,7 @@ public class UserServiceImpl implements UserService {
                 .age(user.getAge())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
-                .avatar(user.getAvatar().getFileName())
+                .avatar(user.getAvatar())
                 .accountType(user.getAccountType())
                 .password(user.getPassword())
                 .build();
