@@ -17,6 +17,10 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/master.yaml
 
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
 #====================== DataBase ========================
 
 logging:

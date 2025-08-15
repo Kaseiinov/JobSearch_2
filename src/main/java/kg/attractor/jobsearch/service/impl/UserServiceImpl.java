@@ -1,13 +1,14 @@
 package kg.attractor.jobsearch.service.impl;
 
-import kg.attractor.jobsearch.dao.RoleDao;
-import kg.attractor.jobsearch.dao.UserDao;
+
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
 import kg.attractor.jobsearch.exceptions.UserNotFoundException;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.model.UserImage;
+import kg.attractor.jobsearch.repository.UserRepository;
+import kg.attractor.jobsearch.service.RoleService;
 import kg.attractor.jobsearch.service.UserService;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,17 +22,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao;
+    private final UserRepository userRepository;
     private final PasswordEncoder encoder;
-    private final RoleDao roleDao;
     private final FileUtil fileUtil;
+    private final RoleService roleService;
 
     @Override
     public void saveUser(UserDto userDto) throws EmailAlreadyExistsException {
         User user = userDtoBuilderToModel(userDto);
-        boolean isExists = userDao.isExistsUser(user.getEmail());
+        boolean isExists = userRepository.existsByEmail(userDto.getEmail());
         if(!isExists){
-            userDao.saveUser(user);
+            userRepository.save(user);
             log.info("Saved user: {}", user.getEmail());
         }else{
             throw new EmailAlreadyExistsException();
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
         String filename = fileUtil.saveUploadFile(userDto.getUserImageDto().getFile(), "images/");
 
         UserImage userImage = new UserImage();
-        userImage.setUserId(userDto.getId());
+        userImage.setUser(findModelUserById(userDto.getId()));
         userImage.setFileName(filename);
 
         User user = User.builder()
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService {
                 .enabled(true)
                 .avatar(userImage)
                 .build();
-        userDao.update(user, email);
+        userRepository.save(user);
     }
 
 //    @Override
@@ -63,16 +64,16 @@ public class UserServiceImpl implements UserService {
 //        List<User> users = userDao.findAll();
 //        return userBuilder(users);
 //    }
-
-    @Override
-    public UserDto findByName(String name){
-        User user = userDao.findByName(name).orElseThrow(UserNotFoundException::new);
-        return userBuilder(user);
-    }
+//
+//    @Override
+//    public UserDto findByName(String name){
+//        User user = userRepository.findByName(name)
+//        return userBuilder(user);
+//    }
 
     @Override
     public UserEditDto findUserEditTypeByEmail(String email){
-        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return UserEditDto
                 .builder()
                 .id(user.getId())
@@ -88,19 +89,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findByEmail(String email){
-        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return userBuilder(user);
     }
 
     @Override
+    public User findModelUserByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+    }
+
+    @Override
+    public User findModelUserById(Long id){
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+
+    }
+
+    @Override
     public UserDto findByPhoneNumber(String number){
-        User user = userDao.findByPhoneNumber(number).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findByPhoneNumber(number).orElseThrow(UserNotFoundException::new);
         return userBuilder(user);
     }
 
     public User userDtoBuilderToModel(UserDto userDto){
         UserImage userImage = new UserImage();
-        userImage.setUserId(userDto.getId());
+        userImage.setUser(findModelUserById(userDto.getId()));
         userImage.setFileName(userDto.getAvatar());
 
         return User
@@ -113,7 +126,7 @@ public class UserServiceImpl implements UserService {
                 .avatar(userImage)
                 .accountType(userDto.getAccountType())
                 .password(encoder.encode(userDto.getPassword()))
-                .roleId(roleDao.getRoleIdByName(userDto.getAccountType()))
+                .roles(List.of(roleService.findRoleById(userDto.getRoleId())))
                 .enabled(true)
                 .build();
     }
@@ -149,7 +162,7 @@ public class UserServiceImpl implements UserService {
                 .age(user.getAge())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
-                .avatar(user.getAvatarString())
+                .avatar(user.getAvatar().getFileName())
                 .accountType(user.getAccountType())
                 .password(user.getPassword())
                 .build();

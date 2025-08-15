@@ -1,13 +1,10 @@
 package kg.attractor.jobsearch.service.impl;
 
-import kg.attractor.jobsearch.dao.ResumeDao;
-import kg.attractor.jobsearch.dao.UserDao;
 import kg.attractor.jobsearch.dto.*;
 import kg.attractor.jobsearch.exceptions.ResumeNotFoundException;
-import kg.attractor.jobsearch.exceptions.UserNotFoundException;
 import kg.attractor.jobsearch.model.*;
-import kg.attractor.jobsearch.service.ResumeService;
-import kg.attractor.jobsearch.service.UserService;
+import kg.attractor.jobsearch.repository.ResumeRepository;
+import kg.attractor.jobsearch.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -21,24 +18,27 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
-    private final ResumeDao resumeDao;
-    private final UserDao userDao;
+    private final ResumeRepository resumeRepository;
     private final UserService userService;
+    private final CategoryService categoryService;
+    private final WorkExperienceService workExperienceService;
+    private final EducationInfoService educationInfoService;
+    private final ContactInfoService contactInfoService;
 
     @Override
     public void addResume(ResumeDto resumeDto, Authentication auth){
-        User user = userDao.findByEmail(auth.getName()).orElseThrow(UserNotFoundException::new);
+        User user = userService.findModelUserByEmail(auth.getName());
 
         Resume resume = new Resume();
-        resume.setApplicantId(user.getId());
+        resume.setApplicant(user);
         resume.setName(resumeDto.getName());
-        resume.setCategoryId(resumeDto.getCategoryId());
+        resume.setCategory(categoryService.findModelCategoryById(resumeDto.getCategoryId()));
         resume.setSalary(resumeDto.getSalary());
         resume.setIsActive(resumeDto.getIsActive());
         resume.setCreatedDate(LocalDateTime.now());
         resume.setUpdateTime(null);
 
-        resumeDao.create(resume);
+        resumeRepository.save(resume);
 
 
 //        if (resumeDto.getWorkExperience() != null) {
@@ -67,7 +67,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public void updateExperienceById(WorkExperienceInfoDto expDto, Long id) {
         WorkExperienceInfo exp = expBuilderToModel(expDto);
-        resumeDao.updateExperience(exp, id);
+        workExperienceService.save(exp);
     }
 
     @Override
@@ -76,19 +76,19 @@ public class ResumeServiceImpl implements ResumeService {
             throw new DateTimeException("End date can't be before start date");
         }
         EducationInfo education = educationBuilderToModel(educationDto);
-        resumeDao.updateEducations(education, id);
+        educationInfoService.save(education);
     }
 
     @Override
     public void updateContactById(ContactsInfoDto contactDto, Long id){
         ContactInfo contact = contactDtoBuilderToModel(contactDto);
-        resumeDao.updateContactInfo(contact, id);
+        contactInfoService.save(contact);
     }
 
     @Override
     public void createExperience(WorkExperienceInfoDto expDto) {
         WorkExperienceInfo exp = expBuilderToModel(expDto);
-        resumeDao.createExperience(exp);
+        workExperienceService.save(exp);
         log.info("Experience created");
     }
 
@@ -98,42 +98,42 @@ public class ResumeServiceImpl implements ResumeService {
             throw new DateTimeException("End date can't be before start date");
         }
         EducationInfo education = educationBuilderToModel(educationDto);
-        resumeDao.createEducation(education);
+        educationInfoService.save(education);
         log.info("Education created");
     }
 
     @Override
     public void createContact(ContactsInfoDto contactDto){
         ContactInfo contact = contactDtoBuilderToModel(contactDto);
-        resumeDao.createContact(contact);
+        contactInfoService.save(contact);
         log.info("Contact created");
     }
 
     @Override
     public void create(ResumeDto resumeDto){
         Resume resume = resumeDtoBuilderToModel(resumeDto);
-        resumeDao.create(resume);
+        resumeRepository.save(resume);
         log.info("Resume created");
     }
 
     @Override
     public void editById(ResumeDto resumeDto, Long id, String email){
-        UserDto userDto = userService.findByEmail(email);
+        User user = userService.findModelUserByEmail(email);
         Resume resume = resumeDtoBuilderToModel(resumeDto);
-        resume.setApplicantId(userDto.getId());
+        resume.setApplicant(user);
 
-        resumeDao.updateResumeById(id, resume);
+        resumeRepository.save(resume);
 
     }
 
     @Override
     public void deleteById(Long id){
-        resumeDao.deleteById(id);
+        resumeRepository.deleteById(id);
     }
 
     @Override
     public List<ResumeDto> findAllActive(){
-        List<Resume> resumes = resumeDao.findAllActive();
+        List<Resume> resumes = resumeRepository.findAllByIsActive(true);
         return resumeBuilder(resumes);
     }
 
@@ -144,13 +144,13 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public List<ResumeDto> findByCategory(String category){
-        List<Resume> resumes = resumeDao.findByCategory(category);
+        List<Resume> resumes = resumeRepository.findByCategory_Name(category);
         return resumeBuilder(resumes);
     }
 
     @Override
     public List<ResumeDto> findByAuthor(String email){
-        List<Resume> resumes = resumeDao.findByAuthor(email);
+        List<Resume> resumes = resumeRepository.findResumeByApplicant_Email(email);
         return resumeBuilder(resumes);
     }
 
@@ -161,8 +161,14 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public ResumeDto findResumeById(Long id){
-        Resume resume = resumeDao.findById(id).orElseThrow(ResumeNotFoundException::new);
+        Resume resume = resumeRepository.findById(id).orElseThrow(ResumeNotFoundException::new);
         return resumeBuilder(resume);
+    }
+
+    @Override
+    public Resume findModelResumeById(Long id){
+        return resumeRepository.findById(id).orElseThrow(ResumeNotFoundException::new);
+
     }
 
     public ContactInfo contactDtoBuilderToModel(ContactsInfoDto contactDto){
@@ -177,7 +183,7 @@ public class ResumeServiceImpl implements ResumeService {
     public WorkExperienceInfo expBuilderToModel(WorkExperienceInfoDto expDto) {
         return WorkExperienceInfo
                 .builder()
-                .resumeId(expDto.getResumeId())
+                .resume(findModelResumeById(expDto.getResumeId()))
                 .years(expDto.getYears())
                 .companyName(expDto.getCompanyName())
                 .position(expDto.getPosition())
@@ -199,9 +205,9 @@ public class ResumeServiceImpl implements ResumeService {
 
     public Resume resumeDtoBuilderToModel(ResumeDto resumeDto){
         return Resume.builder()
-                .applicantId(resumeDto.getApplicantId())
+                .applicant(userService.findModelUserById(resumeDto.getApplicantId()))
                 .name(resumeDto.getName())
-                .categoryId(resumeDto.getCategoryId())
+                .category(categoryService.findModelCategoryById(resumeDto.getCategoryId()))
                 .salary(resumeDto.getSalary())
                 .isActive(resumeDto.getIsActive())
                 .createdDate(LocalDateTime.now())
@@ -246,9 +252,9 @@ public class ResumeServiceImpl implements ResumeService {
                 .stream()
                 .map(r -> ResumeDto.builder()
                         .id(r.getId())
-                        .applicantId(r.getApplicantId())
+                        .applicantId(r.getApplicant().getId())
                         .name(r.getName())
-                        .categoryId(r.getCategoryId())
+                        .categoryId(r.getCategory().getId())
                         .salary(r.getSalary())
                         .isActive(r.getIsActive())
                         .createdDate(r.getCreatedDate())
@@ -290,9 +296,9 @@ public class ResumeServiceImpl implements ResumeService {
     public ResumeDto resumeBuilder(Resume resume){
         return ResumeDto.builder()
                 .id(resume.getId())
-                .applicantId(resume.getApplicantId())
+                .applicantId(resume.getApplicant().getId())
                 .name(resume.getName())
-                .categoryId(resume.getCategoryId())
+                .categoryId(resume.getCategory().getId())
                 .salary(resume.getSalary())
                 .isActive(resume.getIsActive())
                 .createdDate(resume.getCreatedDate())

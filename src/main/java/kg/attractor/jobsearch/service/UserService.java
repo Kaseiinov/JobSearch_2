@@ -15,11 +15,15 @@ public interface UserService {
 //    List<UserDto> findAll();
 
 
-    UserDto findByName(String name);
+//    UserDto findByName(String name);
 
     UserEditDto findUserEditTypeByEmail(String email);
 
     UserDto findByEmail(String email);
+
+    User findModelUserByEmail(String email);
+
+    User findModelUserById(Long id);
 
     UserDto findByPhoneNumber(String number);
 
