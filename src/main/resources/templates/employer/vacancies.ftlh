@@ -5,7 +5,7 @@
 
 
     <#if vacancies??>
-        <#list vacancies as vacancy>
+        <#list vacancies.getContent() as vacancy>
 
             <style>
                 .card {
@@ -30,6 +30,27 @@
             </div>
         </#list>
     </#if>
+
+    <#if vacancies.getTotalElements() gt 0>
+        <nav aria-label="..." class="d-flex justify-content-center" >
+            <ul class="pagination" >
+                <li class="page-item <#if vacancies.first>disabled</#if>">
+                    <a class="page-link" href="?page=${vacancies.getNumber()-1}&size=${vacancies.size}">Previous</a>
+                </li>
+
+                <#list 1..vacancies.getTotalPages() as page>
+                    <li class="page-item <#if page = vacancies.getNumber() + 1>active</#if>" aria-current="page">
+                        <a class="page-link" href="?page=${page - 1}&size=${vacancies.size}">${page}</a>
+                    </li>
+                </#list>
+
+                <li class="page-item <#if vacancies.last>disabled</#if>">
+                    <a class="page-link" href="?page=${vacancies.getNumber()+1}&size=${vacancies.size}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </#if>
+
 
 
 

@@ -6,14 +6,13 @@ import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.service.CategoryService;
 import kg.attractor.jobsearch.service.VacancyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,8 +24,9 @@ public class VacancyController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public String vacancies(Model model) {
-        model.addAttribute("vacancies", vacancyService.findAllActive());
+    public String vacancies(@PageableDefault(size = 5) Pageable pageable,
+                            Model model) {
+        model.addAttribute("vacancies", vacancyService.findAllActive(pageable));
         return "employer/vacancies";
     }
 

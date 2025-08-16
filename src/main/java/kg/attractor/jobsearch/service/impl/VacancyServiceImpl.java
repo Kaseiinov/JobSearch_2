@@ -12,6 +12,10 @@ import kg.attractor.jobsearch.service.UserService;
 import kg.attractor.jobsearch.service.VacancyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -91,8 +95,8 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<VacancyDto> findAllActive(){
-        return vacancyBuilder(vacancyRepository.findVacanciesByIsActive(true));
+    public Page<VacancyDto> findAllActive(Pageable pageable){
+        return vacancyPageBuilder(vacancyRepository.findVacanciesByIsActive(true, pageable));
     }
 
     @Override
@@ -114,7 +118,7 @@ public class VacancyServiceImpl implements VacancyService {
         return vacancyBuilder(vacancy);
     }
 
-    public List<VacancyDto> vacancyBuilder(List<Vacancy> vacancies){
+    public Page<VacancyDto> vacancyPageBuilder(Page<Vacancy> vacancies){
         List<VacancyDto> vacancyDtos = vacancies
                 .stream()
                 .map(r -> VacancyDto.builder()
@@ -130,7 +134,27 @@ public class VacancyServiceImpl implements VacancyService {
                         .createdDate(r.getCreatedDate())
                         .updateTime(r.getUpdateTime())
                         .build()).toList();
-        return vacancyDtos;
+
+        return new PageImpl<>(vacancyDtos, vacancies.getPageable(), vacancies.getTotalElements());
+
+    }
+
+    public List<VacancyDto> vacancyBuilder(List<Vacancy> vacancies){
+        return vacancies
+                .stream()
+                .map(r -> VacancyDto.builder()
+                        .id(r.getId())
+                        .name(r.getName())
+                        .description(r.getDescription())
+                        .categoryId(r.getCategory().getId())
+                        .salary(r.getSalary())
+                        .isActive(r.getIsActive())
+                        .expFrom(r.getExpFrom())
+                        .expTo(r.getExpTo())
+                        .authorId(r.getAuthor().getId())
+                        .createdDate(r.getCreatedDate())
+                        .updateTime(r.getUpdateTime())
+                        .build()).toList();
 
     }
 
