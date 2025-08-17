@@ -11,7 +11,7 @@
     <h2 class="mb-4 text-center">Список резюме</h2>
 
     <#if resumes??>
-        <#list resumes as resume>
+        <#list resumes.getContent() as resume>
 
             <div class="card p-3 mb-4" >
                 <div class="d-flex align-items-start">
@@ -62,6 +62,26 @@
                 </#if>
             </div>
         </#list>
+    </#if>
+
+    <#if resumes.getTotalElements() gt 0>
+        <nav aria-label="..." class="d-flex justify-content-center" >
+            <ul class="pagination" >
+                <li class="page-item <#if resumes.first>disabled</#if>">
+                    <a class="page-link" href="?page=${resumes.getNumber()-1}&size=${resumes.size}">Previous</a>
+                </li>
+
+                <#list 1..resumes.getTotalPages() as page>
+                    <li class="page-item <#if page = resumes.getNumber() + 1>active</#if>" aria-current="page">
+                        <a class="page-link" href="?page=${page - 1}&size=${resumes.size}">${page}</a>
+                    </li>
+                </#list>
+
+                <li class="page-item <#if resumes.last>disabled</#if>">
+                    <a class="page-link" href="?page=${resumes.getNumber()+1}&size=${resumes.size}">Next</a>
+                </li>
+            </ul>
+        </nav>
     </#if>
 
 
