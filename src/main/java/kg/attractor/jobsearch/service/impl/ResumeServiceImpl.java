@@ -7,6 +7,9 @@ import kg.attractor.jobsearch.repository.ResumeRepository;
 import kg.attractor.jobsearch.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -136,9 +139,9 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public List<ResumeDto> findAllActive(){
-        List<Resume> resumes = resumeRepository.findAllByIsActive(true);
-        return resumeBuilder(resumes);
+    public Page<ResumeDto> findAllActive(Pageable pageable){
+        Page<Resume> resumes = resumeRepository.findAllByIsActive(true, pageable);
+        return resumePageBuilder(resumes);
     }
 
     @Override
@@ -294,6 +297,54 @@ public class ResumeServiceImpl implements ResumeService {
 //                                        .build()).toList())
                         .build())
                 .toList();
+
+    }
+
+    public Page<ResumeDto> resumePageBuilder(Page<Resume> resumes){
+        List<ResumeDto> resumesDto =  resumes.getContent()
+                .stream()
+                .map(r -> ResumeDto.builder()
+                        .id(r.getId())
+                        .applicantId(r.getApplicant().getId())
+                        .name(r.getName())
+                        .categoryId(r.getCategory().getId())
+                        .salary(r.getSalary())
+                        .isActive(r.getIsActive())
+                        .createdDate(r.getCreatedDate())
+                        .updateTime(r.getUpdateTime())
+//                        .educations(r.getEducations()
+//                                .stream()
+//                                .map(edu -> EducationInfoDto
+//                                        .builder()
+//                                        .resumeId(edu.getResumeId())
+//                                        .institution(edu.getInstitution())
+//                                        .program(edu.getProgram())
+//                                        .startDate(edu.getStartDate())
+//                                        .endDate(edu.getEndDate())
+//                                        .degree(edu.getDegree())
+//                                        .build()).toList())
+//                        .workExperience(r.getExperience()
+//                                .stream()
+//                                .map(exp -> WorkExperienceInfoDto
+//                                        .builder()
+//                                        .resumeId(exp.getResumeId())
+//                                        .years(exp.getYears())
+//                                        .companyName(exp.getCompanyName())
+//                                        .position(exp.getPosition())
+//                                        .responsibilities(exp.getResponsibilities())
+//                                        .build()).toList())
+//                        .contacts(r.getContacts()
+//                                .stream()
+//                                .map(con -> ContactsInfoDto
+//                                        .builder()
+//                                        .typeId(con.getTypeId())
+//                                        .resumeId(con.getResumeId())
+//                                        .value(con.getValue())
+//                                        .build()).toList())
+                        .build())
+                .toList();
+
+        return new PageImpl<>(resumesDto, resumes.getPageable(), resumes.getTotalElements());
 
     }
 

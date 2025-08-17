@@ -7,6 +7,8 @@ import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.service.CategoryService;
 import kg.attractor.jobsearch.service.ResumeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,8 +28,9 @@ public class ResumeController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public String resumes(Model model) {
-        model.addAttribute("resumes", resumeService.findAllActive());
+    public String resumes(@PageableDefault(size = 5) Pageable pageable,
+                          Model model) {
+        model.addAttribute("resumes", resumeService.findAllActive(pageable));
         return "applicant/resumes";
     }
 

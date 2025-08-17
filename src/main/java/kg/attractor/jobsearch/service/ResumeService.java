@@ -5,6 +5,8 @@ import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.model.Resume;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
@@ -30,7 +32,7 @@ public interface ResumeService {
 
     void deleteById(Long id);
 
-    List<ResumeDto> findAllActive();
+    Page<ResumeDto> findAllActive(Pageable pageable);
 
     List<ResumeDto> findAll();
 
