@@ -58,32 +58,54 @@
             <#if user.accountType == "employer">Созданные вакансии:<#else>Резюме:</#if>
         </h5>
 
-        <div class="row">
-            <#list items as item>
-                <div class="col-md-4">
-                    <div class="card mb-3 shadow-sm">
-                        <div class="card-body">
-                            <h6 class="card-title">${item.name}</h6>
-                            <p class="card-text text-muted">
-                                Дата обновления: ${item.updateTimeFormatted!""}
-                            </p>
-                            <#if user.accountType == "applicant">
-                                <div class="d-flex justify-content-between">
-                                    <a href="/resumes/update/${item.id}" class="btn btn-outline-primary btn-sm">Обновить</a>
-                                    <a href="/resumes/edit/${item.id}" class="btn btn-outline-success btn-sm">Ред.</a>
-                                </div>
-                            <#elseif user.accountType == "employer">
-                                <div class="d-flex justify-content-between">
-                                    <a href="/vacancies/update/${item.id}" class="btn btn-outline-primary btn-sm">Обновить</a>
-                                    <a href="/vacancies/edit/${item.id}" class="btn btn-outline-success btn-sm">Ред.</a>
-                                </div>
-                            </#if>
+        <div class="row mb-3">
+            <#if items??>
+                <#list items.getContent() as item>
+                    <div class="col-md-4">
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title">${item.name}</h6>
+                                <p class="card-text text-muted">
+                                    Дата обновления: ${item.updateTimeFormatted!""}
+                                </p>
+                                <#if user.accountType == "applicant">
+                                    <div class="d-flex justify-content-between">
+                                        <a href="/resumes/update/${item.id}" class="btn btn-outline-primary btn-sm">Обновить</a>
+                                        <a href="/resumes/edit/${item.id}" class="btn btn-outline-success btn-sm">Ред.</a>
+                                    </div>
+                                <#elseif user.accountType == "employer">
+                                    <div class="d-flex justify-content-between">
+                                        <a href="/vacancies/update/${item.id}" class="btn btn-outline-primary btn-sm">Обновить</a>
+                                        <a href="/vacancies/edit/${item.id}" class="btn btn-outline-success btn-sm">Ред.</a>
+                                    </div>
+                                </#if>
 
+                            </div>
                         </div>
                     </div>
-                </div>
-            </#list>
+                </#list>
+            </#if>
         </div>
+
+        <#if items.getTotalElements() gt 0>
+            <nav aria-label="..." class="d-flex justify-content-center" >
+                <ul class="pagination" >
+                    <li class="page-item <#if items.first>disabled</#if>">
+                        <a class="page-link" href="?page=${items.getNumber()-1}&size=${items.size}">Previous</a>
+                    </li>
+
+                    <#list 1..items.getTotalPages() as page>
+                        <li class="page-item <#if page = items.getNumber() + 1>active</#if>" aria-current="page">
+                            <a class="page-link" href="?page=${page - 1}&size=${items.size}">${page}</a>
+                        </li>
+                    </#list>
+
+                    <li class="page-item <#if items.last>disabled</#if>">
+                        <a class="page-link" href="?page=${items.getNumber()+1}&size=${items.size}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </#if>
     </div>
 
     </body>
