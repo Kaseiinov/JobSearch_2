@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
-    List<Vacancy> findVacanciesByAuthor_Email(String authorEmail);
+    Page<Vacancy> findVacanciesByAuthor_Email(String authorEmail, Pageable pageable);
 
     Page<Vacancy> findVacanciesByIsActive(Boolean isActive, Pageable pageable);
 

@@ -156,9 +156,9 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public List<ResumeDto> findByAuthor(String email){
-        List<Resume> resumes = resumeRepository.findResumeByApplicant_Email(email);
-        return resumeBuilder(resumes);
+    public Page<ResumeDto> findByAuthor(String email, Pageable pageable){
+        Page<Resume> resumes = resumeRepository.findResumeByApplicant_Email(email, pageable);
+        return resumePageBuilder(resumes);
     }
 
     @Override

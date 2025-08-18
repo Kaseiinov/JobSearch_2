@@ -75,19 +75,19 @@ public class ResumeController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<ResumeDto>> getAllResumes(
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) String authorEmail) {
-
-        if (category != null) {
-            return ResponseEntity.ok(resumeService.findByCategory(category));
-        }
-        if (authorEmail != null) {
-            return ResponseEntity.ok(resumeService.findByAuthor(authorEmail));
-        }
-        return ResponseEntity.ok(resumeService.findAll());
-    }
+//    @GetMapping
+//    public ResponseEntity<List<ResumeDto>> getAllResumes(
+//            @RequestParam(required = false) String category,
+//            @RequestParam(required = false) String authorEmail) {
+//
+//        if (category != null) {
+//            return ResponseEntity.ok(resumeService.findByCategory(category));
+//        }
+//        if (authorEmail != null) {
+//            return ResponseEntity.ok(resumeService.findByAuthor(authorEmail));
+//        }
+//        return ResponseEntity.ok(resumeService.findAll());
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResumeDto> getResumeById(@PathVariable Long id) {

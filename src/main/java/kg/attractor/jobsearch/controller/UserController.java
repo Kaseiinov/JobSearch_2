@@ -10,6 +10,9 @@ import kg.attractor.jobsearch.service.ResumeService;
 import kg.attractor.jobsearch.service.UserService;
 import kg.attractor.jobsearch.service.VacancyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,14 +32,16 @@ public class UserController {
     private final VacancyService vacancyService;
 
     @GetMapping("/profile")
-    public String profile(Model model, Authentication auth) {
+    public String profile(@PageableDefault(size = 6) Pageable pageable,
+                          Model model,
+                          Authentication auth) {
         String username = auth.getName();
         UserDto userDto = userService.findByEmail(username);
         if(userDto.getAccountType().equalsIgnoreCase("employer")){
-            List<VacancyDto> vacancies = vacancyService.findByAuthor(username);
+            Page<VacancyDto> vacancies = vacancyService.findByAuthor(username, pageable);
             model.addAttribute("items", vacancies);
         }else if(userDto.getAccountType().equalsIgnoreCase("applicant")){
-            List<ResumeDto> resumes = resumeService.findByAuthor(username);
+            Page<ResumeDto> resumes = resumeService.findByAuthor(username, pageable);
             model.addAttribute("items", resumes);
         }
         model.addAttribute("user",userDto);

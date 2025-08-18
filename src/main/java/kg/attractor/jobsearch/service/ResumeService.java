@@ -38,7 +38,7 @@ public interface ResumeService {
 
     List<ResumeDto> findByCategory(String category);
 
-    List<ResumeDto> findByAuthor(String email);
+    Page<ResumeDto> findByAuthor(String email, Pageable pageable);
 
     List<ResumeDto> findRespondersToVacancyById(Long id);
 

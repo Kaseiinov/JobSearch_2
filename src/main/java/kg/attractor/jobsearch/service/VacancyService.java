@@ -14,7 +14,7 @@ public interface VacancyService {
 
     void deleteById(Long id);
 
-    List<VacancyDto> findByAuthor(String email);
+    Page<VacancyDto> findByAuthor(String email, Pageable pageable);
 
 //    List<VacancyDto> findVacanciesByUserResponse(String email);
 

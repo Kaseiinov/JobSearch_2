@@ -77,9 +77,9 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<VacancyDto> findByAuthor(String email){
-        List<Vacancy> vacancies = vacancyRepository.findVacanciesByAuthor_Email(email);
-        return vacancyBuilder(vacancies);
+    public Page<VacancyDto> findByAuthor(String email, Pageable pageable){
+        Page<Vacancy> vacancies = vacancyRepository.findVacanciesByAuthor_Email(email, pageable);
+        return vacancyPageBuilder(vacancies);
     }
 
 //    @Override
