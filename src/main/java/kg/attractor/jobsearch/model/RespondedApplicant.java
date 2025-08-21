@@ -12,7 +12,13 @@ public class RespondedApplicant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    private Resume resumeId;
-//    private Vacancy vacancyId;
-//    private Boolean confirmation;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vacancy_id")
+    private Vacancy vacancy;
+
+    private Boolean confirmation;
 }

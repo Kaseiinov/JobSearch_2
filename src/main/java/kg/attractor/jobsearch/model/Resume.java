@@ -41,4 +41,7 @@ public class Resume {
     @OneToMany(mappedBy = "resume")
     private Collection<ContactInfo> contactInfos;
 
+    @OneToMany(mappedBy = "resume")
+    private Collection<RespondedApplicant> responses;
+
 }

@@ -32,4 +32,7 @@ public class Vacancy {
     private LocalDateTime createdDate;
     private LocalDateTime updateTime;
 
+    @OneToMany(mappedBy = "vacancy")
+    private Collection<RespondedApplicant> responses;
+
 }
