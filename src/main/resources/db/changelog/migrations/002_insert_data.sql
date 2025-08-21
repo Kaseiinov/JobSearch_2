@@ -113,6 +113,10 @@ VALUES
 
     ((SELECT r.id FROM resumes r JOIN users u ON r.applicant_id = u.id WHERE u.email = 'alice.smith@example.com' AND r.name = 'Data Analyst'),
      (SELECT v.id FROM vacancies v JOIN users u ON v.author_id = u.id WHERE u.email = 'careers@datasys.io' AND v.name = 'Data Scientist'),
+     TRUE),
+
+    ((SELECT r.id FROM resumes r JOIN users u ON r.applicant_id = u.id WHERE u.email = 'john.doe@example.com' AND r.name = 'Senior Java Developer'),
+     (SELECT v.id FROM vacancies v JOIN users u ON v.author_id = u.id WHERE u.email = 'careers@datasys.io' AND v.name = 'Data Scientist'),
      TRUE);
 
 INSERT INTO contacts_info (type_id, resume_id, info_value)
