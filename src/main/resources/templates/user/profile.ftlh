@@ -58,6 +58,28 @@
             <#if user.accountType == "employer">Созданные вакансии:<#else>Резюме:</#if>
         </h5>
 
+        <style>
+            .btn-group .dropdown-menu {
+                min-width: 100%;
+            }
+
+            .btn-drop{
+                min-width: 200px;
+            }
+        </style>
+
+        <div class="d-flex justify-content-end  mb-3">
+            <div class="btn-group w-auto">
+                <button type="button" class="btn btn-outline-info dropdown-toggle btn-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort by
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end w-100">
+                    <li><a class="dropdown-item" href="?sort=createdDate,asc">Created date</a></li>
+                    <li><a class="dropdown-item" href="?sort=responses,desc">Responses</a></li>
+                </ul>
+            </div>
+        </div>
+
         <div class="row mb-3">
             <#if items??>
                 <#list items.getContent() as item>

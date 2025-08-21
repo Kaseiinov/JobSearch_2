@@ -11,9 +11,9 @@ VALUES
     ((SELECT id FROM users WHERE email = 'alice.smith@example.com'), 'Python Developer', (SELECT id FROM categories WHERE name = 'Programming'), 92000, FALSE, '2022-05-10', '2023-05-10');
 
 INSERT INTO users (name, surname, age, email, password, phone_number, avatar, account_type, role_id) VALUES
-                                                                                                ('Robert', 'Johnson', 30, 'robert.j@example.com', '$2a$10$6asNSFuS0OsD4Pnk5httR.vB0qXFScIauXb/DAv.hK6eVZiwgeuFe', '+1122334455', null, 'applicant', (select id from roles where id = 2)),
-                                                                                                ('Emily', 'Wilson', 29, 'emily.w@example.com', '$2a$10$6asNSFuS0OsD4Pnk5httR.vB0qXFScIauXb/DAv.hK6eVZiwgeuFe', '+1555666777', null, 'applicant' , (select id from roles where id = 2)),
-                                                                                                ('Michael', 'Brown', 35, 'michael.b@example.com', '$2a$10$6asNSFuS0OsD4Pnk5httR.vB0qXFScIauXb/DAv.hK6eVZiwgeuFe', '+1444333222', null, 'applicant' , (select id from roles where id = 2));
+('Robert', 'Johnson', 30, 'robert.j@example.com', '$2a$10$6asNSFuS0OsD4Pnk5httR.vB0qXFScIauXb/DAv.hK6eVZiwgeuFe', '+1122334455', null, 'applicant', (select id from roles where id = 2)),
+('Emily', 'Wilson', 29, 'emily.w@example.com', '$2a$10$6asNSFuS0OsD4Pnk5httR.vB0qXFScIauXb/DAv.hK6eVZiwgeuFe', '+1555666777', null, 'applicant' , (select id from roles where id = 2)),
+('Michael', 'Brown', 35, 'michael.b@example.com', '$2a$10$6asNSFuS0OsD4Pnk5httR.vB0qXFScIauXb/DAv.hK6eVZiwgeuFe', '+1444333222', null, 'applicant' , (select id from roles where id = 2));
 
 INSERT INTO resumes (applicant_id, name, category_id, salary, is_active, created_date, update_time)
 VALUES

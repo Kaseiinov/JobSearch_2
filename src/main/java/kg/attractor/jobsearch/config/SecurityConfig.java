@@ -29,7 +29,7 @@ public class SecurityConfig {
                 "where email = ?;";
 
         String roleQuery = """
-                select u.email, 
+                select u.email ,
                 r.role_name
                 from users u
                 join usr_roles ur on u.id = ur.user_id

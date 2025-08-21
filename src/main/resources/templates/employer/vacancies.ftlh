@@ -3,6 +3,16 @@
 
     <h2 class="mb-4 text-center">Список вакансий</h2>
 
+    <style>
+        .btn-group .dropdown-menu {
+            min-width: 100%;
+        }
+
+        .btn-drop{
+            min-width: 200px;
+        }
+    </style>
+
     <div class="d-flex justify-content-end  mb-3">
         <div class="btn-group w-auto">
             <button type="button" class="btn btn-outline-info dropdown-toggle btn-drop" data-bs-toggle="dropdown" aria-expanded="false">
@@ -14,6 +24,8 @@
             </ul>
         </div>
     </div>
+
+
 
 
     <#if vacancies??>
@@ -63,15 +75,7 @@
         </nav>
     </#if>
 
-<style>
-    .btn-group .dropdown-menu {
-        min-width: 100%;
-    }
 
-    .btn-drop{
-        min-width: 200px;
-    }
-</style>
 
 
 </@main.layout>
