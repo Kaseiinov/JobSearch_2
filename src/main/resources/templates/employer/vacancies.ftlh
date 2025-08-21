@@ -3,6 +3,18 @@
 
     <h2 class="mb-4 text-center">Список вакансий</h2>
 
+    <div class="d-flex justify-content-end  mb-3">
+        <div class="btn-group w-auto">
+            <button type="button" class="btn btn-outline-info dropdown-toggle btn-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                Sort by
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end w-100">
+                <li><a class="dropdown-item" href="?sort=createdDate,asc">Created date</a></li>
+                <li><a class="dropdown-item" href="?sort=responses,desc">Responses</a></li>
+            </ul>
+        </div>
+    </div>
+
 
     <#if vacancies??>
         <#list vacancies.getContent() as vacancy>
@@ -51,7 +63,15 @@
         </nav>
     </#if>
 
+<style>
+    .btn-group .dropdown-menu {
+        min-width: 100%;
+    }
 
+    .btn-drop{
+        min-width: 200px;
+    }
+</style>
 
 
 </@main.layout>
