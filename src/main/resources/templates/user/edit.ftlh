@@ -19,7 +19,7 @@
         </#if>
 
         <input type="hidden" name="id" value="${userEditDto.id}">
-        <input type="hidden" name="email" value="${userEditDto.email}">
+<#--        <input type="hidden" name="email" value="${userEditDto.email}">-->
         <input type="hidden" name="accountType" value="${userEditDto.accountType}">
         <input type="hidden" name="password" value="${userEditDto.password}">
 

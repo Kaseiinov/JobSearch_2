@@ -19,7 +19,7 @@
                 Sort by
             </button>
             <ul class="dropdown-menu dropdown-menu-end w-100">
-                <li><a class="dropdown-item" href="?sort=createdDate,asc">Created date</a></li>
+                <li><a class="dropdown-item" href="?sort=createdDate,desc">Created date</a></li>
                 <li><a class="dropdown-item" href="?sort=responses,desc">Responses</a></li>
             </ul>
         </div>
