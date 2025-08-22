@@ -2,6 +2,9 @@ package kg.attractor.jobsearch.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +16,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,4 +46,13 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicant")
     private Collection<Resume> resumes;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(roles.iterator().next().getRole()));
+    }
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
 }
