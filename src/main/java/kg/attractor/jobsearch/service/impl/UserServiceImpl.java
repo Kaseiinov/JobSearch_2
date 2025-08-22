@@ -5,19 +5,22 @@ import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
 import kg.attractor.jobsearch.exceptions.UserNotFoundException;
+import kg.attractor.jobsearch.model.Authority;
 import kg.attractor.jobsearch.model.Role;
 import kg.attractor.jobsearch.model.User;
-import kg.attractor.jobsearch.model.UserImage;
 import kg.attractor.jobsearch.repository.UserRepository;
 import kg.attractor.jobsearch.service.RoleService;
 import kg.attractor.jobsearch.service.UserService;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -33,16 +36,16 @@ public class UserServiceImpl implements UserService {
     public void saveUser(UserDto userDto) throws EmailAlreadyExistsException {
         User user = userDtoBuilderToModel(userDto);
         boolean isExists = userRepository.existsByEmail(userDto.getEmail());
-        if(!isExists){
+        if (!isExists) {
             userRepository.save(user);
             log.info("Saved user: {}", user.getEmail());
-        }else{
+        } else {
             throw new EmailAlreadyExistsException();
         }
     }
 
     @Override
-    public void editUserByEmail(UserEditDto userDto, String email){
+    public void editUserByEmail(UserEditDto userDto, String email) {
         String filename = fileUtil.saveUploadFile(userDto.getUserImageDto().getFile(), "images/");
 
 //        UserImage userImage = new UserImage();
@@ -74,7 +77,7 @@ public class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public UserEditDto findUserEditTypeByEmail(String email){
+    public UserEditDto findUserEditTypeByEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return UserEditDto
                 .builder()
@@ -90,30 +93,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findByEmail(String email){
+    public UserDto findByEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return userBuilder(user);
     }
 
     @Override
-    public User findModelUserByEmail(String email){
+    public User findModelUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
 
     }
 
     @Override
-    public User findModelUserById(Long id){
+    public User findModelUserById(Long id) {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
     }
 
     @Override
-    public UserDto findByPhoneNumber(String number){
+    public UserDto findByPhoneNumber(String number) {
         User user = userRepository.findByPhoneNumber(number).orElseThrow(UserNotFoundException::new);
         return userBuilder(user);
     }
 
-    public User userDtoBuilderToModel(UserDto userDto){
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UserNotFoundException {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(UserNotFoundException::new);
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                user.getAuthorities()
+        );
+    }
+
+    public User userDtoBuilderToModel(UserDto userDto) {
 //        UserImage userImage = new UserImage();
 //        userImage.setUser(findModelUserById(userDto.getId()));
 //        userImage.setFileName(userDto.getAvatar());
@@ -156,7 +170,7 @@ public class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public UserDto userBuilder(User user){
+    public UserDto userBuilder(User user) {
 
         return UserDto.builder()
                 .id(user.getId())
@@ -171,4 +185,5 @@ public class UserServiceImpl implements UserService {
                 .build();
 
     }
+
 }

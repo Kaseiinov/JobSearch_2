@@ -3,19 +3,17 @@ package kg.attractor.jobsearch.service;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
+import kg.attractor.jobsearch.exceptions.UserNotFoundException;
 import kg.attractor.jobsearch.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
     void saveUser(UserDto userDto) throws EmailAlreadyExistsException;
 
     void editUserByEmail(UserEditDto userDto, String email);
-
-//    List<UserDto> findAll();
-
-
-//    UserDto findByName(String name);
 
     UserEditDto findUserEditTypeByEmail(String email);
 
@@ -27,7 +25,7 @@ public interface UserService {
 
     UserDto findByPhoneNumber(String number);
 
-//    List<UserDto> userBuilder(List<User> users);
+    UserDetails loadUserByUsername(String username) throws UserNotFoundException;
 
     UserDto userBuilder(User user);
 }
