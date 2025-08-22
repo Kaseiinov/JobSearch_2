@@ -20,28 +20,8 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final PasswordEncoder encoder;
-    private final DataSource dataSource;
 
-    @Autowired
-    public void configurationGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        String userQuery = "select email, password, enabled " +
-                "from users " +
-                "where email = ?;";
 
-        String roleQuery = """
-                select u.email ,
-                r.role_name
-                from users u
-                join usr_roles ur on u.id = ur.user_id
-                join roles r on r.id = ur.role_id
-                where u.email = ?;
-                """;
-
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .usersByUsernameQuery(userQuery)
-                .authoritiesByUsernameQuery(roleQuery);
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -51,6 +31,7 @@ public class SecurityConfig {
                 .formLogin(login -> login
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
+                        .failureForwardUrl("/auth/login?error=true")
                         .defaultSuccessUrl("/")
                         .failureUrl("/auth/login")
                         .permitAll())
@@ -58,7 +39,7 @@ public class SecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .permitAll())
-                .csrf(AbstractHttpConfigurer::disable)
+//                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         //Auth end points
 
@@ -88,4 +69,28 @@ public class SecurityConfig {
                 );
         return http.build();
     }
+
+//    private final DataSource dataSource;
+//
+//    @Autowired
+//    public void configurationGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        String userQuery = "select email, password, enabled " +
+//                "from users " +
+//                "where email = ?;";
+//
+//        String roleQuery = """
+//                select u.email ,
+//                r.role_name
+//                from users u
+//                join usr_roles ur on u.id = ur.user_id
+//                join roles r on r.id = ur.role_id
+//                where u.email = ?;
+//                """;
+//
+//        auth.jdbcAuthentication()
+//                .dataSource(dataSource)
+//                .usersByUsernameQuery(userQuery)
+//                .authoritiesByUsernameQuery(roleQuery);
+//    }
+
 }
