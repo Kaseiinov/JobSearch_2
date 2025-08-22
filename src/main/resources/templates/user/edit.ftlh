@@ -13,6 +13,11 @@
 
     <form action="/users/edit" method="post" enctype="multipart/form-data">
 
+        <#if _csrf??>
+            <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
+                   value="${(_csrf.token)!'csrf-token'}"/>
+        </#if>
+
         <input type="hidden" name="id" value="${userEditDto.id}">
         <input type="hidden" name="email" value="${userEditDto.email}">
         <input type="hidden" name="accountType" value="${userEditDto.accountType}">

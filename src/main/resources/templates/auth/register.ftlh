@@ -36,6 +36,11 @@
 
                             <form action="/auth/register" method="post" class="mt-4">
 
+                                <#if _csrf??>
+                                    <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
+                                           value="${(_csrf.token)!'csrf-token'}"/>
+                                </#if>
+
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <label class="form-label" for="form3Example1cg">Your first name</label>
                                 <@spring.formInput "userDto.name" 'id="form3Example1cg" class="form-control form-control-lg"' />

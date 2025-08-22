@@ -3,6 +3,11 @@
 
     <form action="/resumes/edit" method="post" >
 
+        <#if _csrf??>
+            <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
+                   value="${(_csrf.token)!'csrf-token'}"/>
+        </#if>
+
         <input type="hidden" name="id" value="${resumeDto.id}" />
 
         <div class="mb-3">
