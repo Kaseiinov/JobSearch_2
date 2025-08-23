@@ -23,6 +23,22 @@ spring:
 
 #====================== DataBase ========================
 
+  #============================= Mail config
+
+  mail:
+    host: smtp.gmail.com
+    username: izlax6002@gmail.com
+    password: "sznj qgnx hsjj fyuz"
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+#============================= Mail config
+
 logging:
   level:
     root: info
