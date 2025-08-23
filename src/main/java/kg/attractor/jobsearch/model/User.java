@@ -31,6 +31,8 @@ public class User implements UserDetails {
     private String accountType;
     private String avatar;
     private Boolean enabled;
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

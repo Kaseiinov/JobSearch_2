@@ -1,27 +1,28 @@
 package kg.attractor.jobsearch.service.impl;
 
 
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
 import kg.attractor.jobsearch.exceptions.UserNotFoundException;
-import kg.attractor.jobsearch.model.Authority;
 import kg.attractor.jobsearch.model.Role;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.repository.UserRepository;
 import kg.attractor.jobsearch.service.RoleService;
 import kg.attractor.jobsearch.service.UserService;
+import kg.attractor.jobsearch.util.CommonUtilities;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final FileUtil fileUtil;
     private final RoleService roleService;
+    private final EmailService emailService;
 
     @Override
     public void saveUser(UserDto userDto) throws EmailAlreadyExistsException {
@@ -126,6 +128,37 @@ public class UserServiceImpl implements UserService {
                 user.getAuthorities()
         );
     }
+
+    @Override
+    public void makeResetPasswdLink(HttpServletRequest request) throws UserNotFoundException, UnsupportedEncodingException, MessagingException {
+        String email = request.getParameter("email");
+        String token = UUID.randomUUID().toString();
+        updateResetPasswordToken(token, email);
+        String resetPasswordLnk = CommonUtilities.getSiteURL(request) + "/auth/reset_password?token=" + token;
+        emailService.sendEmail(email, resetPasswordLnk);
+    }
+
+    @Override
+    public void updateResetPasswordToken(String token, String email){
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        user.setResetPasswordToken(token);
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public User getUserByResetPasswordToken(String token){
+        return userRepository.findByResetPasswordToken(token).orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public void updatePassword(User user, String password){
+        String encodedPassword = encoder.encode(password);
+        user.setPassword(encodedPassword);
+        user.setResetPasswordToken(null);
+        userRepository.saveAndFlush(user);
+    }
+
+
 
     public User userDtoBuilderToModel(UserDto userDto) {
 //        UserImage userImage = new UserImage();
