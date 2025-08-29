@@ -30,15 +30,6 @@ public class MainController {
                             Model model) {
         model.addAttribute("vacancies", vacancyService.findAllActive(pageable));
 
-        if (auth != null) {
-            UserDto user = userService.findByEmail(auth.getName());
-            Role role = roleService.findRoleById(user.getRoleId());
-
-            if (role.getRole().equals("employer")) {
-                return "redirect:/resumes";
-            }
-        }
-
         return "employer/vacancies";
     }
 }
