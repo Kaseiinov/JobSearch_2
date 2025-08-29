@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.config;
 
+import kg.attractor.jobsearch.service.impl.CustomAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -20,8 +23,7 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final PasswordEncoder encoder;
-
-
+    private final CustomAuthenticationSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,7 +34,7 @@ public class SecurityConfig {
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
                         .failureForwardUrl("/auth/login?error=true")
-                        .defaultSuccessUrl("/")
+                        .successHandler(successHandler)
                         .failureUrl("/auth/login")
                         .permitAll())
                 .logout(logout -> logout
@@ -68,6 +70,10 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 );
         return http.build();
+    }
+
+    public static Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 
 //    private final DataSource dataSource;
