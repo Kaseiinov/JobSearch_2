@@ -2,6 +2,7 @@ package kg.attractor.jobsearch.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
@@ -14,6 +15,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
+//    void autoLogin(String userEmail, String decodedPassword, HttpServletRequest request, HttpServletResponse response);
+
+
     void saveUser(UserDto userDto) throws EmailAlreadyExistsException;
 
     void editUserByEmail(UserEditDto userDto, String email);
@@ -26,7 +30,6 @@ public interface UserService extends UserDetailsService {
 
     User findModelUserById(Long id);
 
-    UserDto findByPhoneNumber(String number);
 
     UserDetails loadUserByUsername(String username) throws UserNotFoundException;
 
@@ -39,4 +42,6 @@ public interface UserService extends UserDetailsService {
     void updatePassword(User user, String password);
 
     UserDto userBuilder(User user);
+
+    void autoLogin(User user);
 }

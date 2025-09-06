@@ -2,12 +2,14 @@ package kg.attractor.jobsearch.controller;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.ResetPasswordFormDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
 import kg.attractor.jobsearch.model.User;
 import kg.attractor.jobsearch.service.UserService;
+import kg.attractor.jobsearch.service.impl.CustomAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
+    private final CustomAuthenticationSuccessHandler successHandler;
 
 
     @GetMapping("/register")
@@ -32,9 +35,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register( @Valid UserDto userDto,  BindingResult bindingResult, Model model) throws EmailAlreadyExistsException {
+    public String register(@Valid UserDto userDto, BindingResult bindingResult, Model model, HttpServletRequest request, HttpServletResponse response) throws EmailAlreadyExistsException {
         if(!bindingResult.hasErrors()){
             userService.saveUser(userDto);
+//            userService.autoLogin(userDto.getEmail(), userDto.getPassword(), request, response);
             return "redirect:/auth/login";
         }
 

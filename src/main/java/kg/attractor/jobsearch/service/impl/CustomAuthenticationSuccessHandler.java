@@ -3,8 +3,14 @@ package kg.attractor.jobsearch.service.impl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kg.attractor.jobsearch.model.User;
+import kg.attractor.jobsearch.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +18,9 @@ import java.io.IOException;
 import java.util.Collection;
 
 @Component
+@RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler  implements AuthenticationSuccessHandler {
+    private final UserService userService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -37,5 +45,7 @@ public class CustomAuthenticationSuccessHandler  implements AuthenticationSucces
         }
 
         response.sendRedirect(redirectURL);
+
+
     }
 }
