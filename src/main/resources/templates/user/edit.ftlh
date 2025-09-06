@@ -1,7 +1,6 @@
 <#import "../layout.ftlh" as main>
 <@main.layout ; spring>
     <style>
-
         h2 {
             color: red;
             text-align: center;
@@ -9,7 +8,7 @@
         }
     </style>
 
-    <h2>Иземенение пользователя</h2>
+    <h2><@spring.message "user_edit.title" /></h2>
 
     <form action="/users/edit" method="post" enctype="multipart/form-data">
 
@@ -19,41 +18,41 @@
         </#if>
 
         <input type="hidden" name="id" value="${userEditDto.id}">
-<#--        <input type="hidden" name="email" value="${userEditDto.email}">-->
         <input type="hidden" name="accountType" value="${userEditDto.accountType}">
         <input type="hidden" name="password" value="${userEditDto.password}">
 
         <div class="mb-3">
-            <label class="form-label">Name:</label>
+            <label class="form-label"><@spring.message "user_edit.name" />:</label>
             <@spring.formInput "userEditDto.name" 'class="form-control form-control-lg"' />
             <@spring.showErrors "<br>" "error text-danger" />
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Surname:</label>
+            <label class="form-label"><@spring.message "user_edit.surname" />:</label>
             <@spring.formInput "userEditDto.surname" 'class="form-control form-control-lg"' />
             <@spring.showErrors "<br>" "error text-danger" />
         </div>
 
         <div class="mb-3">
-            <label class="form-label">age:</label>
+            <label class="form-label"><@spring.message "user_edit.age" />:</label>
             <@spring.formInput "userEditDto.age" 'class="form-control form-control-lg"' />
             <@spring.showErrors "<br>" "error text-danger" />
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Phone number:</label>
+            <label class="form-label"><@spring.message "user_edit.phone_number" />:</label>
             <@spring.formInput "userEditDto.phoneNumber" 'class="form-control form-control-lg"' />
             <@spring.showErrors "<br>" "error text-danger" />
         </div>
 
         <div class="mb-3">
-            <label for="formFileMultiple" class="form-label">Photo</label>
+            <label for="formFileMultiple" class="form-label"><@spring.message "user_edit.photo" /></label>
             <input type="hidden" name="userImageDto.userId" value="${userEditDto.id}">
             <input name="userImageDto.file" class="form-control" type="file" id="formFileMultiple">
-
         </div>
 
-        <button type="submit" class="btn btn-success w-100 mb-3">Сохранить</button>
+        <button type="submit" class="btn btn-success w-100 mb-3">
+            <@spring.message "user_edit.save" />
+        </button>
     </form>
 </@main.layout>
