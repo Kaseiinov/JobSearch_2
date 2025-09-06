@@ -19,33 +19,36 @@ import java.util.Collection;
 
 @Component
 @RequiredArgsConstructor
-public class CustomAuthenticationSuccessHandler  implements AuthenticationSuccessHandler {
+public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final UserService userService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
+        String redirectURL = determineRedirectUrl(authentication);
+        response.sendRedirect(redirectURL);
+    }
+
+    public String determineRedirectUrl(Authentication authentication) {
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         String redirectURL = "/";
 
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
-            if (role.equals("admin")) {
+            if (role.equals("ROLE_ADMIN") || role.equals("admin")) {
                 redirectURL = "/admin/dashboard";
                 break;
-            } else if (role.equals("employer")) {
+            } else if (role.equals("ROLE_EMPLOYER") || role.equals("employer")) {
                 redirectURL = "/resumes";
                 break;
-            } else if (role.equals("applicant")) {
+            } else if (role.equals("ROLE_APPLICANT") || role.equals("applicant")) {
                 redirectURL = "/vacancies";
                 break;
             }
         }
-
-        response.sendRedirect(redirectURL);
-
-
+        return redirectURL;
     }
 }
+

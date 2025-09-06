@@ -12,6 +12,7 @@ import kg.attractor.jobsearch.service.UserService;
 import kg.attractor.jobsearch.service.impl.CustomAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,9 +38,16 @@ public class AuthController {
     @PostMapping("/register")
     public String register(@Valid UserDto userDto, BindingResult bindingResult, Model model, HttpServletRequest request, HttpServletResponse response) throws EmailAlreadyExistsException {
         if(!bindingResult.hasErrors()){
-            userService.saveUser(userDto);
-//            userService.autoLogin(userDto.getEmail(), userDto.getPassword(), request, response);
-            return "redirect:/auth/login";
+            userService.saveUser(request, userDto);
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.isAuthenticated()) {
+                String redirectUrl = successHandler.determineRedirectUrl(authentication);
+                return "redirect:" + redirectUrl;
+            }
+
+            return "redirect:/auth/login?authError=true";
         }
 
         model.addAttribute("userDto", userDto);

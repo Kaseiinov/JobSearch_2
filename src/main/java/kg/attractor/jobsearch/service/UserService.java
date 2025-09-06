@@ -15,10 +15,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-//    void autoLogin(String userEmail, String decodedPassword, HttpServletRequest request, HttpServletResponse response);
 
 
-    void saveUser(UserDto userDto) throws EmailAlreadyExistsException;
+    void authWithHttpServletRequest(HttpServletRequest request, String username, String password);
+
+    void saveUser(HttpServletRequest request, UserDto userDto) throws EmailAlreadyExistsException;
 
     void editUserByEmail(UserEditDto userDto, String email);
 
@@ -43,5 +44,4 @@ public interface UserService extends UserDetailsService {
 
     UserDto userBuilder(User user);
 
-    void autoLogin(User user);
 }

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final UserService userService;
 
-    @PostMapping
-    public void createUser(@RequestBody @Valid UserDto userDto) throws EmailAlreadyExistsException {
-        userService.saveUser(userDto);
-    }
+//    @PostMapping
+//    public void createUser(@RequestBody @Valid UserDto userDto) throws EmailAlreadyExistsException {
+//        userService.saveUser(userDto);
+//    }
 }
