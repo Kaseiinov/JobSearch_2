@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as main>
-<@main.layout>
+<@main.layout ; spring>
 
     <style>
         .card {
@@ -15,24 +15,27 @@
         }
     </style>
 
-    <div class="d-flex justify-content-end  mb-3">
+    <div class="d-flex justify-content-end mb-3">
         <div class="btn-group w-auto">
             <button type="button" class="btn btn-outline-info dropdown-toggle btn-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                Sort by
+                <@spring.message "common.sort_by" />
             </button>
             <ul class="dropdown-menu dropdown-menu-end w-100">
-                <li><a class="dropdown-item" href="?sort=createdDate,desc">Created date</a></li>
-                <li><a class="dropdown-item" href="?sort=responses,desc">Responses</a></li>
+                <li><a class="dropdown-item" href="?sort=createdDate,desc">
+                        <@spring.message "sort.created_date" />
+                    </a></li>
+                <li><a class="dropdown-item" href="?sort=responses,desc">
+                        <@spring.message "sort.responses" />
+                    </a></li>
             </ul>
         </div>
     </div>
 
-    <h2 class="mb-4 text-center">Список резюме</h2>
+    <h2 class="mb-4 text-center"><@spring.message "resumes.list_title" /></h2>
 
     <#if resumes??>
         <#list resumes.getContent() as resume>
-
-            <div class="card p-3 mb-4" >
+            <div class="card p-3 mb-4">
                 <div class="d-flex align-items-start">
                     <#if resume.user??>
                         <#if resume.user.avatar?? && resume.user.avatar.fileName??>
@@ -42,41 +45,47 @@
                                  alt="avatar"
                                  class="me-3 rounded">
                         <#else>
-                    </#if>
-                        <i class="fas fa-user-circle me-3 rounded" style="font-size: 80px; color: #6c757d;"></i>
+                            <i class="fas fa-user-circle me-3 rounded" style="font-size: 80px; color: #6c757d;"></i>
+                        </#if>
                     </#if>
                     <div class="flex-grow-1">
                         <h5 class="mb-1">${resume.name}</h5>
 
-                        <#if  resume.user?? && resume.user.age?? >
+                        <#if resume.user?? && resume.user.age??>
                             <div class="text-muted small">
-                                ${resume.user.age} года • <span class="text-success">Обновлено ${resume.updateTime!}</span>
+                                ${resume.user.age} <@spring.message "resumes.years" /> •
+                                <span class="text-success">
+                                    <@spring.message "resumes.updated" /> ${resume.updateTime!}
+                                </span>
                             </div>
                         <#else>
                             <div class="text-muted small">
-                                <span class="text-success">Обновлено ${resume.updateTime!}</span>
+                                <span class="text-success">
+                                    <@spring.message "resumes.updated" /> ${resume.updateTime!}
+                                </span>
                             </div>
                         </#if>
-
                     </div>
                 </div>
 
                 <hr>
 
                 <div class="small mb-2">
-                    <strong>Опыт работы</strong><br>
+                    <strong><@spring.message "resumes.experience" /></strong><br>
                     <#if resume.workExperience?? && resume.workExperience.years??>
-                        ${resume.workExperience.years}
+                        ${resume.workExperience.years} <@spring.message "resumes.years" />
                     <#else>
-                        нет
+                        <@spring.message "resumes.no_experience" />
                     </#if>
                 </div>
 
                 <#if resume.workExperience?? && resume.workExperience.companyName??>
                     <div class="small mb-2">
-                        <strong>Последнее место работы</strong><br>
+                        <strong><@spring.message "resumes.last_job" /></strong><br>
                         <span class="fw-bold">${resume.workExperience.companyName}</span><br>
-                        <a href="#" class="text-primary small">Подробнее о последнем месте</a>
+                        <a href="#" class="text-primary small">
+                            <@spring.message "resumes.more_details" />
+                        </a>
                     </div>
                 </#if>
             </div>
@@ -84,10 +93,12 @@
     </#if>
 
     <#if resumes.getTotalElements() gt 0>
-        <nav aria-label="..." class="d-flex justify-content-center" >
-            <ul class="pagination" >
+        <nav aria-label="..." class="d-flex justify-content-center">
+            <ul class="pagination">
                 <li class="page-item <#if resumes.first>disabled</#if>">
-                    <a class="page-link" href="?page=${resumes.getNumber()-1}&size=${resumes.size}">Previous</a>
+                    <a class="page-link" href="?page=${resumes.getNumber()-1}&size=${resumes.size}">
+                        <@spring.message "pagination.previous" />
+                    </a>
                 </li>
 
                 <#list 1..resumes.getTotalPages() as page>
@@ -97,11 +108,12 @@
                 </#list>
 
                 <li class="page-item <#if resumes.last>disabled</#if>">
-                    <a class="page-link" href="?page=${resumes.getNumber()+1}&size=${resumes.size}">Next</a>
+                    <a class="page-link" href="?page=${resumes.getNumber()+1}&size=${resumes.size}">
+                        <@spring.message "pagination.next" />
+                    </a>
                 </li>
             </ul>
         </nav>
     </#if>
-
 
 </@main.layout>
