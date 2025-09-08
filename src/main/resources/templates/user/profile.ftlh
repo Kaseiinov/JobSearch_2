@@ -1,15 +1,15 @@
 <#import "../layout.ftlh" as main>
-<@main.layout>
+<@main.layout ; spring>
 
     <body class="bg-light">
 
     <div class="text-center mb-4">
         <h2 style="color: red;">
-            Личный кабинет
+            <@spring.message "profile.title"/>
             <#if user.accountType == "employer">
-                Работодателя
+                <@spring.message "profile.employer" />
             <#elseif user.accountType == "applicant">
-                Соискателя
+                <@spring.message "profile.applicant" />
             </#if>
         </h2>
     </div>
@@ -28,21 +28,27 @@
                     <h5>${user.name!}</h5>
                 <#elseif user.accountType == "applicant">
                     <h5>${user.name!}</h5>
-                    <p>Возраст: ${user.age!}</p>
+                    <p><@spring.message "profile.age" />: ${user.age!}</p>
                 </#if>
-                <a href="/users/edit" class="btn btn-outline-success btn-sm mt-2">Редактировать</a>
+                <a href="/users/edit" class="btn btn-outline-success btn-sm mt-2">
+                    <@spring.message "common.edit" />
+                </a>
             </div>
         </div>
 
         <div>
             <#if user.accountType == "applicant">
-                <a href="/resumes/create" class="btn btn-outline-danger">+ Создать резюме</a>
+                <a href="/resumes/create" class="btn btn-outline-danger">
+                    + <@spring.message "profile.create_resume" />
+                </a>
             <#elseif user.accountType == "employer">
-                <a href="/vacancies/create" class="btn btn-outline-danger">+ Создать вакансию</a>
+                <a href="/vacancies/create" class="btn btn-outline-danger">
+                    + <@spring.message "profile.create_vacancy" />
+                </a>
             </#if>
             <#if user.accountType == "applicant">
                 <a href="#" class="btn btn-outline-secondary position-relative ms-3">
-                    Отклики
+                    <@spring.message "profile.responses" />
                     <#--                        <#if responsesCount?? && responsesCount > 0>-->
                     <#--                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">-->
                     <#--                            ${responsesCount}-->
@@ -55,7 +61,11 @@
 
     <div>
         <h5>
-            <#if user.accountType == "employer">Созданные вакансии:<#else>Резюме:</#if>
+            <#if user.accountType == "employer">
+                <@spring.message "profile.created_vacancies" />
+            <#else>
+                <@spring.message "profile.resumes" />
+            </#if>
         </h5>
 
         <style>
@@ -71,11 +81,15 @@
         <div class="d-flex justify-content-end  mb-3">
             <div class="btn-group w-auto">
                 <button type="button" class="btn btn-outline-info dropdown-toggle btn-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                    Sort by
+                    <@spring.message "common.sort_by" />
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end w-100">
-                    <li><a class="dropdown-item" href="?sort=createdDate,desc">Created date</a></li>
-                    <li><a class="dropdown-item" href="?sort=responses,desc">Responses</a></li>
+                    <li><a class="dropdown-item" href="?sort=createdDate,desc">
+                            <@spring.message "sort.created_date" />
+                        </a></li>
+                    <li><a class="dropdown-item" href="?sort=responses,desc">
+                            <@spring.message "sort.responses" />
+                        </a></li>
                 </ul>
             </div>
         </div>
@@ -88,17 +102,25 @@
                             <div class="card-body">
                                 <h6 class="card-title">${item.name}</h6>
                                 <p class="card-text text-muted">
-                                    Дата обновления: ${item.updateTimeFormatted!""}
+                                    <@spring.message "common.updated_date" />: ${item.updateTimeFormatted!""}
                                 </p>
                                 <#if user.accountType == "applicant">
                                     <div class="d-flex justify-content-between">
-                                        <a href="/resumes/update/${item.id}" class="btn btn-outline-primary btn-sm">Обновить</a>
-                                        <a href="/resumes/edit/${item.id}" class="btn btn-outline-success btn-sm">Ред.</a>
+                                        <a href="/resumes/update/${item.id}" class="btn btn-outline-primary btn-sm">
+                                            <@spring.message "common.update" />
+                                        </a>
+                                        <a href="/resumes/edit/${item.id}" class="btn btn-outline-success btn-sm">
+                                            <@spring.message "common.edit" />
+                                        </a>
                                     </div>
                                 <#elseif user.accountType == "employer">
                                     <div class="d-flex justify-content-between">
-                                        <a href="/vacancies/update/${item.id}" class="btn btn-outline-primary btn-sm">Обновить</a>
-                                        <a href="/vacancies/edit/${item.id}" class="btn btn-outline-success btn-sm">Ред.</a>
+                                        <a href="/vacancies/update/${item.id}" class="btn btn-outline-primary btn-sm">
+                                            <@spring.message "common.update" />
+                                        </a>
+                                        <a href="/vacancies/edit/${item.id}" class="btn btn-outline-success btn-sm">
+                                            <@spring.message "common.edit" />
+                                        </a>
                                     </div>
                                 </#if>
 
@@ -113,7 +135,9 @@
             <nav aria-label="..." class="d-flex justify-content-center" >
                 <ul class="pagination" >
                     <li class="page-item <#if items.first>disabled</#if>">
-                        <a class="page-link" href="?page=${items.getNumber()-1}&size=${items.size}">Previous</a>
+                        <a class="page-link" href="?page=${items.getNumber()-1}&size=${items.size}">
+                            <@spring.message "pagination.previous" />
+                        </a>
                     </li>
 
                     <#list 1..items.getTotalPages() as page>
@@ -123,7 +147,9 @@
                     </#list>
 
                     <li class="page-item <#if items.last>disabled</#if>">
-                        <a class="page-link" href="?page=${items.getNumber()+1}&size=${items.size}">Next</a>
+                        <a class="page-link" href="?page=${items.getNumber()+1}&size=${items.size}">
+                            <@spring.message "pagination.next" />
+                        </a>
                     </li>
                 </ul>
             </nav>

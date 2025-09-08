@@ -1,7 +1,7 @@
 <#import "../layout.ftlh" as main>
 <@main.layout ; spring>
 
-    <form action="/resumes/edit" method="post" >
+    <form action="/resumes/edit" method="post">
 
         <#if _csrf??>
             <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
@@ -11,14 +11,15 @@
         <input type="hidden" name="id" value="${resumeDto.id}" />
 
         <div class="mb-3">
-            <label for="form3Example3cg" class="form-label">Название резюме</label>
+            <label for="form3Example3cg" class="form-label"><@spring.message "resume_edit.name" /></label>
             <@spring.formInput "resumeDto.name" 'id="form3Example3cg" class="form-control"' />
             <@spring.showErrors "<br>" "error text-danger" />
         </div>
+
         <div class="mb-3">
-            <label for="disabledSelect" class="form-label">Категория</label>
+            <label for="disabledSelect" class="form-label"><@spring.message "resume_edit.category" /></label>
             <select name="categoryId" id="disabledSelect" class="form-select">
-                <option>Выберите категорию</option>
+                <option><@spring.message "resume_edit.select_category" /></option>
                 <#if categories??>
                     <#list categories as category>
                         <option value="${category.id}">${category.name}</option>
@@ -27,25 +28,29 @@
             </select>
             <@spring.showErrors "<br>" "error text-danger" />
         </div>
+
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Ожидаемый уровень оклада</label>
+            <label for="exampleInputPassword1" class="form-label"><@spring.message "resume_edit.salary" /></label>
             <@spring.formInput "resumeDto.salary" 'id="exampleInputPassword1" class="form-control"' />
             <@spring.showErrors "<br>" "error text-danger" />
         </div>
 
         <div class="mb-3 form-check">
             <input type="hidden" name="_isActive" value="on">
-
             <input type="checkbox"
                    name="isActive"
                    class="form-check-input"
                    id="isActiveCheckbox"
                    value="true"
                     ${(resumeDto.isActive?? && resumeDto.isActive)?then('checked', '')}>
-
-            <label class="form-check-label" for="isActiveCheckbox">Активно</label>
+            <label class="form-check-label" for="isActiveCheckbox">
+                <@spring.message "resume_edit.active" />
+            </label>
         </div>
-        <button type="submit" class="btn btn-primary">Редактировать</button>
+
+        <button type="submit" class="btn btn-primary">
+            <@spring.message "resume_edit.submit" />
+        </button>
     </form>
 
 </@main.layout>

@@ -5,5 +5,7 @@ import kg.attractor.jobsearch.model.Role;
 public interface RoleService {
     Role findRoleByName(String name);
 
+    void save(Role role);
+
     Role findRoleById(Long id);
 }

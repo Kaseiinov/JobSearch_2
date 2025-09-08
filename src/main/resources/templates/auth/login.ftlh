@@ -1,6 +1,6 @@
 <#import "../layout.ftlh" as main>
-<@main.layout>
-    <section class=" text-center text-lg-start">
+<@main.layout ; spring>
+    <section class="text-center text-lg-start">
         <style>
             .rounded-t-5 {
                 border-top-left-radius: 0.5rem;
@@ -35,19 +35,26 @@
 
                             <!-- Email input -->
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="email" id="form2Example1" class="form-control" name="username"/>
-                                <label class="form-label" for="form2Example1">Email address</label>
+                                <input type="email" id="form2Example1" class="form-control" name="username"
+                                       placeholder="<@spring.message 'login.email_placeholder' />"/>
+                                <label class="form-label" for="form2Example1"><@spring.message "login.email" /></label>
                             </div>
 
                             <!-- Password input -->
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="password" id="form2Example2" class="form-control" name="password"/>
-                                <label class="form-label" for="form2Example2">Password</label>
+                                <input type="password" id="form2Example2" class="form-control" name="password"
+                                       placeholder="<@spring.message 'login.password_placeholder' />"/>
+                                <label class="form-label" for="form2Example2"><@spring.message "login.password" /></label>
                             </div>
+
                             <!-- Submit button -->
                             <div class="d-flex align-items-center mb-4">
-                                <button type="submit" class="btn btn-primary me-3">Sign in</button>
-                                <a href="/auth/forgot_password" class="text-decoration-none text-primary small">Forgot password?</a>
+                                <button type="submit" class="btn btn-primary me-3">
+                                    <@spring.message "login.submit" />
+                                </button>
+                                <a href="/auth/forgot_password" class="text-decoration-none text-primary small">
+                                    <@spring.message "login.forgot_password" />
+                                </a>
                             </div>
                         </form>
 
