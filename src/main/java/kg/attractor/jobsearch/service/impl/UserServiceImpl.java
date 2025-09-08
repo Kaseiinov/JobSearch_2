@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.exceptions.EmailAlreadyExistsException;
+import kg.attractor.jobsearch.exceptions.RoleNotFoundException;
 import kg.attractor.jobsearch.exceptions.UserNotFoundException;
 import kg.attractor.jobsearch.model.Role;
 import kg.attractor.jobsearch.model.User;
@@ -22,10 +23,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -47,11 +48,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void saveUser(HttpServletRequest request, UserDto userDto) throws EmailAlreadyExistsException {
         User user = userDtoBuilderToModel(userDto);
         boolean isExists = userRepository.existsByEmail(userDto.getEmail());
         if (!isExists) {
-            userRepository.save(user);
+            userRepository.saveAndFlush(user);
             log.info("Saved user: {}", user.getEmail());
 
             authWithHttpServletRequest(request, userDto.getEmail(), userDto.getPassword());
@@ -157,9 +159,6 @@ public class UserServiceImpl implements UserService {
 
 
     public User userDtoBuilderToModel(UserDto userDto) {
-//        UserImage userImage = new UserImage();
-//        userImage.setUser(findModelUserById(userDto.getId()));
-//        userImage.setFileName(userDto.getAvatar());
         Role role = roleService.findRoleByName(userDto.getAccountType());
 
         return User
@@ -172,7 +171,7 @@ public class UserServiceImpl implements UserService {
                 .avatar(userDto.getAvatar())
                 .accountType(userDto.getAccountType())
                 .password(encoder.encode(userDto.getPassword()))
-                .roles(List.of(role))
+                .roles(Collections.singletonList(role))
                 .enabled(true)
                 .build();
     }

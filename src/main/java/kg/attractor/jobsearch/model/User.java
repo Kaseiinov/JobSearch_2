@@ -6,11 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -34,13 +34,13 @@ public class User implements UserDetails {
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
         name = "usr_roles",
         joinColumns =@JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Collection<Role> roles;
+    private Collection<Role> roles = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
     private Collection<Vacancy> vacancies;
